@@ -9,6 +9,10 @@
 *appsettings.Development.json
 *appsettings.Production.json
 
+#docker and docker compose files
+*.yml
+*.yaml
+
 # User-specific files
 *.rsuser
 *.suo
