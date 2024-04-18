@@ -15,19 +15,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{08078A95-97D6-44A0-8493-F52F54385AB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService.API", "src\CoreService\Presentation\CoreService.API\CoreService.API.csproj", "{5F096CAD-511C-4111-B27A-357D7EBFEE4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreService.API", "src\CoreService\Presentation\CoreService.API\CoreService.API.csproj", "{5F096CAD-511C-4111-B27A-357D7EBFEE4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.JWT", "_src\_libs\Mambo.JWT\Mambo.JWT.csproj", "{BB710886-53B5-4E23-947E-4E6798A5EE1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.JWT", "_src\_libs\Mambo.JWT\Mambo.JWT.csproj", "{BB710886-53B5-4E23-947E-4E6798A5EE1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.Mongo", "_src\_libs\Mambo.Mongo\Mambo.Mongo.csproj", "{EB248DF9-7C66-4B69-9651-4057938E8FE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.Mongo", "_src\_libs\Mambo.Mongo\Mambo.Mongo.csproj", "{EB248DF9-7C66-4B69-9651-4057938E8FE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.MassTransit", "_src\_libs\Mambo.MassTransit\Mambo.MassTransit.csproj", "{DA4F881D-1AB2-49AD-B722-7321CBB60B6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.MassTransit", "_src\_libs\Mambo.MassTransit\Mambo.MassTransit.csproj", "{DA4F881D-1AB2-49AD-B722-7321CBB60B6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.Pagination", "_src\_libs\Mambo.Pagination\Mambo.Pagination.csproj", "{003FA17D-889E-44C4-AB8A-D12C6FF8C03D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.Pagination", "_src\_libs\Mambo.Pagination\Mambo.Pagination.csproj", "{003FA17D-889E-44C4-AB8A-D12C6FF8C03D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.Middleware", "_src\_libs\Mambo.Middleware\Mambo.Middleware.csproj", "{80B9E191-7CD5-49F0-AC9A-3B8B237D8801}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.Middleware", "_src\_libs\Mambo.Middleware\Mambo.Middleware.csproj", "{80B9E191-7CD5-49F0-AC9A-3B8B237D8801}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.Response", "_src\_libs\Mambo.Response\Mambo.Response.csproj", "{95AE3C1E-CB32-48F0-A65B-813F95240898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.Response", "_src\_libs\Mambo.Response\Mambo.Response.csproj", "{95AE3C1E-CB32-48F0-A65B-813F95240898}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService.Application", "_src\CoreService\Core\CoreService.Application\CoreService.Application.csproj", "{B028B93A-4817-42B6-9F08-138CCB713FE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService.Domain", "_src\CoreService\Core\CoreService.Domain\CoreService.Domain.csproj", "{9BA1B5D6-22ED-48AC-947E-9C0D8C735C2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService.Infrastructure", "_src\CoreService\Infrastructure\CoreService.Infrastructure\CoreService.Infrastructure.csproj", "{95297E02-9044-45CE-9661-8F77816AB52A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService.Persistence", "_src\CoreService\Infrastructure\CoreService.Persistence\CoreService.Persistence.csproj", "{EE06989A-7795-46C7-A4D5-1E8C28480777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +71,22 @@ Global
 		{95AE3C1E-CB32-48F0-A65B-813F95240898}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95AE3C1E-CB32-48F0-A65B-813F95240898}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95AE3C1E-CB32-48F0-A65B-813F95240898}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B028B93A-4817-42B6-9F08-138CCB713FE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B028B93A-4817-42B6-9F08-138CCB713FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B028B93A-4817-42B6-9F08-138CCB713FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B028B93A-4817-42B6-9F08-138CCB713FE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA1B5D6-22ED-48AC-947E-9C0D8C735C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA1B5D6-22ED-48AC-947E-9C0D8C735C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA1B5D6-22ED-48AC-947E-9C0D8C735C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA1B5D6-22ED-48AC-947E-9C0D8C735C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95297E02-9044-45CE-9661-8F77816AB52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95297E02-9044-45CE-9661-8F77816AB52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95297E02-9044-45CE-9661-8F77816AB52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95297E02-9044-45CE-9661-8F77816AB52A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE06989A-7795-46C7-A4D5-1E8C28480777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE06989A-7795-46C7-A4D5-1E8C28480777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE06989A-7795-46C7-A4D5-1E8C28480777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE06989A-7795-46C7-A4D5-1E8C28480777}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +104,10 @@ Global
 		{003FA17D-889E-44C4-AB8A-D12C6FF8C03D} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
 		{80B9E191-7CD5-49F0-AC9A-3B8B237D8801} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
 		{95AE3C1E-CB32-48F0-A65B-813F95240898} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
+		{B028B93A-4817-42B6-9F08-138CCB713FE9} = {1044B5E8-5C7A-4455-A281-D90094F4199D}
+		{9BA1B5D6-22ED-48AC-947E-9C0D8C735C2E} = {1044B5E8-5C7A-4455-A281-D90094F4199D}
+		{95297E02-9044-45CE-9661-8F77816AB52A} = {A6918829-FB22-44F3-ADF2-B84BE8FEBE3D}
+		{EE06989A-7795-46C7-A4D5-1E8C28480777} = {A6918829-FB22-44F3-ADF2-B84BE8FEBE3D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {401B9799-D075-4133-B58C-D9788B81BB40}
