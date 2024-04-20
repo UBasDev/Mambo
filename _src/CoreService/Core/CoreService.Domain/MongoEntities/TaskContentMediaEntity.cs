@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreService.Domain.AggregateRoots.Project
+namespace CoreService.Domain.MongoEntities
 {
-    public sealed class TaskContentCommentMediaEntity : BaseEntity<ObjectId>, ISoftDelete
+    public sealed class TaskContentMediaEntity : BaseEntity<ObjectId>, ISoftDelete
     {
-        public TaskContentCommentMediaEntity()
+        public TaskContentMediaEntity()
         {
-            TaskContentCommentId = 0;
+            TaskContentId = 0;
             MediaPath = string.Empty;
             MediaExtension = string.Empty;
             MediaLength = 0;
@@ -22,10 +22,10 @@ namespace CoreService.Domain.AggregateRoots.Project
             UpdatedAt = null;
         }
 
-        public UInt64 TaskContentCommentId { get; private set; }
+        public ulong TaskContentId { get; private set; }
         public string MediaPath { get; private set; }
         public string MediaExtension { get; private set; }
-        public UInt32 MediaLength { get; private set; }
+        public uint MediaLength { get; private set; }
         public DateTimeOffset? DeletedAt { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }

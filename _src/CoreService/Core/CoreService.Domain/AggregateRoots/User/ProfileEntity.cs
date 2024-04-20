@@ -22,11 +22,11 @@ namespace CoreService.Domain.AggregateRoots.User
         }
 
         [Range(1, 100, ErrorMessage = "Age should be between 1 and 100")]
-        public UInt16 Age { get; private set; }
+        public UInt16? Age { get; private set; }
 
         public string Firstname { get; private set; }
         public string Lastname { get; private set; }
-        public DateTimeOffset BirthDate { get; private set; }
+        public DateTimeOffset? BirthDate { get; private set; }
         public UserEntity? User { get; private set; }
         public Guid? UserId { get; private set; }
         public CompanyEntity? Company { get; private set; }

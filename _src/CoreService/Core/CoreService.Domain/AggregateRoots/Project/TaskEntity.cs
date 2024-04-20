@@ -1,4 +1,5 @@
 ﻿using CoreService.Domain.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoreService.Domain.AggregateRoots.Project
 {
