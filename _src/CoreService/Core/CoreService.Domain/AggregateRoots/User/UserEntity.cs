@@ -1,4 +1,4 @@
-﻿using ProjectEntity = CoreService.Domain.AggregateRoots.Project.ProjectEntity;
+﻿using CoreService.Domain.AggregateRoots.Project;
 using CoreService.Domain.Common;
 using System.Security.Cryptography;
 

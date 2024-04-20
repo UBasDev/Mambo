@@ -26,7 +26,7 @@ namespace CoreService.Domain.AggregateRoots.Project
         public string CommenterName { get; private set; }
         public string Description { get; private set; }
         public TaskContentEntity? TaskContent { get; private set; }
-        public UInt64? TaskContentId { get; set; }
+        public UInt64? TaskContentId { get; private set; }
         public DateTimeOffset? DeletedAt { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }

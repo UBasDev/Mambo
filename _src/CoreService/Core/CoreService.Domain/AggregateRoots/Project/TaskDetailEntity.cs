@@ -11,7 +11,7 @@ namespace CoreService.Domain.AggregateRoots.Project
     {
         public TaskDetailEntity()
         {
-            AssignedUserId = null;
+            AssignedUserId = Guid.Empty;
             ReporterUserId = Guid.Empty;
             CurrentPriority = string.Empty;
             PriorityList = string.Empty;
@@ -22,12 +22,12 @@ namespace CoreService.Domain.AggregateRoots.Project
             TaskId = null;
         }
 
-        public Guid? AssignedUserId { get; private set; }
+        public Guid AssignedUserId { get; private set; }
         public Guid ReporterUserId { get; private set; }
-        public string CurrentPriority { get; private set; }
         public string PriorityList { get; private set; }
-        public string CurrentStatus { get; private set; }
+        public string CurrentPriority { get; private set; }
         public string StatusList { get; private set; }
+        public string CurrentStatus { get; private set; }
         public string? RelatedTaskIdList { get; private set; }
         public TaskEntity? Task { get; private set; }
         public Guid? TaskId { get; private set; }

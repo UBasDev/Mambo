@@ -9,8 +9,8 @@ namespace CoreService.Domain.Common
             CreatedAt = DateTimeOffset.UtcNow;
         }
 
-        protected T Id { get; set; }
-        protected DateTimeOffset CreatedAt { get; set; }
+        public T Id { get; protected set; }
+        public DateTimeOffset CreatedAt { get; protected set; }
 
         [NotMapped]
         private readonly List<IDomainEvent> domainEvents = new List<IDomainEvent>();
