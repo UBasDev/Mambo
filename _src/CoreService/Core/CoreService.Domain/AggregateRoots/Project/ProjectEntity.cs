@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CoreService.Domain.AggregateRoots.Project
 {
-    public sealed class ProjectEntity : BaseEntity<Guid>, ISoftDelete
+    public sealed class ProjectEntity : BaseEntity<Guid>, IAggregateRoot, ISoftDelete
     {
         public ProjectEntity()
         {
