@@ -1,3 +1,5 @@
+using CoreService.API.Registrations;
+using CoreService.Application.Models;
 using CoreService.Application.Registrations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,13 +12,18 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
 .Build();
 
+var appSettings = new AppSettings();
+configuration.Bind(nameof(AppSettings), appSettings);
+builder.Services.AddSingleton(appSettings);
+builder.Services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddApplicationRegistrations(configuration["AppSettings:MamboCoreDbConnectionString"] ?? string.Empty);
+builder.Services.AddApplicationRegistrations(appSettings.MamboCoreDbConnectionString);
+builder.Services.AddPresentationRegistrations(appSettings.JwtSettings);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,7 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

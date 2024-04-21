@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\_libs\Mambo.JWT\Mambo.JWT.csproj" />
     <ProjectReference Include="..\CoreService.Domain\CoreService.Domain.csproj" />
   </ItemGroup>
 
