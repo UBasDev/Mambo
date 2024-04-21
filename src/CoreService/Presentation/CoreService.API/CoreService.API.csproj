@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,13 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\_src\CoreService\Core\CoreService.Application\CoreService.Application.csproj" />
     <ProjectReference Include="..\..\..\..\_src\CoreService\Infrastructure\CoreService.Infrastructure\CoreService.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\..\_src\CoreService\Infrastructure\CoreService.Persistence\CoreService.Persistence.csproj" />
+    <ProjectReference Include="..\..\..\..\_src\_libs\Mambo.Attribute\Mambo.Attribute.csproj" />
   </ItemGroup>
 
 </Project>
