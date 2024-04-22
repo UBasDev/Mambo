@@ -2,6 +2,7 @@ using CoreService.API.Registrations;
 using CoreService.Application.Models;
 using CoreService.Application.Registrations;
 using Elastic.Apm.NetCoreAll;
+using Elastic.Apm.SerilogEnricher;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -89,6 +90,7 @@ static void SetCustomLogger(IConfigurationRoot configuration, string environment
                 .Enrich.WithMachineName()
                 .WriteTo.Debug()
                 .WriteTo.Console()
+                .Enrich.WithElasticApmCorrelationInfo()
                 .WriteTo.Elasticsearch(ConfigureElasticSink(environment, elasticsearchUrl))
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
