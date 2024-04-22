@@ -22,7 +22,7 @@ namespace CoreService.Application.Contexts
         public DbSet<TaskDetailEntity> TaskDetails => Set<TaskDetailEntity>();
         public DbSet<TaskEntity> Tasks => Set<TaskEntity>();
         public DbSet<TaskFieldEntity> TaskFields => Set<TaskFieldEntity>();
-
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -42,5 +42,6 @@ namespace CoreService.Application.Contexts
         {
             base.RemoveRange(entities);
         }
+        */
     }
 }

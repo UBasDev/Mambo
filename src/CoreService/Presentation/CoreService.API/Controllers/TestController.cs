@@ -10,12 +10,36 @@ namespace CoreService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class TestController(ILogger<TestController> logger) : ControllerBase
     {
+        private readonly ILogger<TestController> _logger = logger;
+
         [HttpGet("authorized1")]
         [CustomAuthorizeAttribute("manager1", "admin1")]
         public IActionResult Authorized1()
         {
+            return Ok();
+        }
+
+        [HttpGet("info1")]
+        public IActionResult Info1()
+        {
+            _logger.LogInformation("Custom info88");
+            return Ok();
+        }
+
+        [HttpGet("debug1")]
+        public IActionResult Debug1()
+        {
+            _logger.LogDebug("Custom debug88");
+            return Ok();
+        }
+
+        [HttpGet("error1")]
+        public IActionResult Error1()
+        {
+            _logger.LogError("Custom exception88");
+            throw new Exception("Custom exception88");
             return Ok();
         }
 
