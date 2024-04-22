@@ -6,11 +6,11 @@ namespace CoreService.Application.Repositories.GenericRepository
     {
         IEnumerable<TEntity> GetAll();
 
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken);
 
         IEnumerable<TEntity> GetAllAsNoTracking();
 
-        Task<IEnumerable<TEntity>> GetAllAsNoTrackingAsync();
+        Task<IEnumerable<TEntity>> GetAllAsNoTrackingAsync(CancellationToken cancellationToken);
 
         TEntity? GetSingleById(object id);
 
