@@ -1,6 +1,8 @@
-﻿namespace CoreService.Application.Features.Command.Role.CreateSingleRole
+﻿using Mambo.Response;
+
+namespace CoreService.Application.Features.Command.Role.CreateSingleRole
 {
-    public class CreateSingleRoleCommandResponse
+    public class CreateSingleRoleCommandResponse : BaseResponse
     {
     }
 }

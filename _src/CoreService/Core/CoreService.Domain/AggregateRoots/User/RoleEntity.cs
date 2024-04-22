@@ -1,4 +1,5 @@
 ﻿using CoreService.Domain.Common;
+using CoreService.Domain.DomainErrors;
 using System.ComponentModel.DataAnnotations;
 
 namespace CoreService.Domain.AggregateRoots.User
@@ -18,6 +19,19 @@ namespace CoreService.Domain.AggregateRoots.User
             UpdatedAt = null;
         }
 
+        public RoleEntity(string name, string shortCode, UInt16 level, string? description)
+        {
+            Name = name;
+            ShortCode = shortCode;
+            Level = level;
+            Description = description;
+            Users = new HashSet<UserEntity>();
+            DeletedAt = null;
+            IsActive = true;
+            IsDeleted = false;
+            UpdatedAt = null;
+        }
+
         public string Name { get; private set; }
         public string ShortCode { get; private set; }
 
@@ -30,5 +44,13 @@ namespace CoreService.Domain.AggregateRoots.User
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
         public DateTimeOffset? UpdatedAt { get; private set; }
+
+        public static (RoleEntity? newRoleEntity, string? errorMessage) CreateNewRole(string name, string shortCode, UInt16 level, string? description)
+        {
+            if (string.IsNullOrEmpty(name)) return (null, DomainErrorStorage.RoleErrors.NameNotValid);
+            else if (string.IsNullOrEmpty(shortCode)) return (null, DomainErrorStorage.RoleErrors.ShortCodeNotValid);
+            else if (level < 1 || level > 5000) return (null, DomainErrorStorage.RoleErrors.LevelNotValid);
+            return (new RoleEntity(name, shortCode, level, description), null);
+        }
     }
 }
