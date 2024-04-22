@@ -1,6 +1,7 @@
 using CoreService.API.Registrations;
 using CoreService.Application.Models;
 using CoreService.Application.Registrations;
+using CoreService.Persistence.Registrations;
 using Elastic.Apm.NetCoreAll;
 using Elastic.Apm.SerilogEnricher;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -44,6 +45,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationRegistrations(appSettings.MamboCoreDbConnectionString);
 builder.Services.AddPresentationRegistrations(appSettings.JwtSettings);
+builder.Services.AddPersistenceRegistrations();
 
 builder.Host.UseSerilog();
 

@@ -19,9 +19,9 @@ namespace CoreService.Persistence.Repositories.GenericRepository
 
         public virtual IEnumerable<TEntity> GetAllAsNoTracking() => _dbSet.AsNoTracking().ToList();
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsNoTrackingAsync() => await _dbSet.AsNoTracking().ToListAsync();
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsNoTrackingAsync(CancellationToken cancellationToken) => await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync() => await _dbSet.ToListAsync();
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken) => await _dbSet.ToListAsync(cancellationToken);
 
         public virtual TEntity? GetSingleById(object id) => _dbSet.Find(id);
 
