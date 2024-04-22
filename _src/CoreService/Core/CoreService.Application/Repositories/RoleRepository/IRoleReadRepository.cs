@@ -1,4 +1,5 @@
-﻿using CoreService.Application.Repositories.GenericRepository;
+﻿using CoreService.Application.Features.Queries.Role.GetAllRoles;
+using CoreService.Application.Repositories.GenericRepository;
 using CoreService.Domain.AggregateRoots.User;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,6 @@ namespace CoreService.Application.Repositories.RoleRepository
 {
     public interface IRoleReadRepository : IGenericReadRepository<RoleEntity>
     {
+        Task<List<GetAllRolesQueryResponseModel>> GetAllRolesWithoutRelationAsNoTrackingAsync();
     }
 }
