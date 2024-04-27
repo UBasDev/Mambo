@@ -1,23 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>11648817-5e32-41f1-8530-481dddaae675</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-    <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.26.0" />
     <PackageReference Include="Elastic.Apm.SerilogEnricher" Version="8.11.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
     <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
@@ -27,10 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\_src\CoreService\Core\CoreService.Application\CoreService.Application.csproj" />
-    <ProjectReference Include="..\..\..\..\_src\CoreService\Infrastructure\CoreService.Infrastructure\CoreService.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\..\..\_src\CoreService\Infrastructure\CoreService.Persistence\CoreService.Persistence.csproj" />
-    <ProjectReference Include="..\..\..\..\_src\_libs\Mambo.Attribute\Mambo.Attribute.csproj" />
+    <ProjectReference Include="..\..\..\_libs\Mambo.APM\Mambo.APM.csproj" />
+    <ProjectReference Include="..\..\..\_libs\Mambo.Attribute\Mambo.Attribute.csproj" />
+    <ProjectReference Include="..\..\Core\CoreService.Application\CoreService.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\CoreService.Persistence\CoreService.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

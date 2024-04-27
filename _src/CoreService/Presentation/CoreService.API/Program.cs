@@ -4,17 +4,14 @@ using CoreService.Application.Registrations;
 using CoreService.Persistence.Registrations;
 using Elastic.Apm.NetCoreAll;
 using Elastic.Apm.SerilogEnricher;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
+using Mambo.APM;
 using Serilog;
-using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "Configurations"))
     .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
@@ -39,6 +36,12 @@ SetCustomLogger(configuration, environment, appSettings.ElasticsearchSettings.El
 
 #endregion Serilog
 
+#region Prometheus
+
+builder.Services.AddOpenTelemetryApm();
+
+#endregion Prometheus
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -50,6 +53,7 @@ builder.Services.AddPersistenceRegistrations();
 builder.Host.UseSerilog();
 
 var app = builder.Build();
+
 app.UseAllElasticApm(configuration);
 app.UseSerilogRequestLogging(requestLogOptions =>
 {
@@ -58,6 +62,12 @@ app.UseSerilogRequestLogging(requestLogOptions =>
         diagnosticContext.Set("Environment", environment);
     };
 });
+
+#region Prometheus
+
+app.UseOpenTelemetryApm();
+
+#endregion Prometheus
 
 #region healthcheck
 
@@ -77,7 +87,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();
 
 #region Serilog
@@ -90,7 +99,6 @@ static void SetCustomLogger(IConfigurationRoot configuration, string environment
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithMachineName()
-                .WriteTo.Debug()
                 .WriteTo.Console()
                 .Enrich.WithElasticApmCorrelationInfo()
                 .WriteTo.Elasticsearch(ConfigureElasticSink(environment, elasticsearchUrl))

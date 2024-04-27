@@ -1,6 +1,7 @@
 ﻿using CoreService.Application.Repositories;
 using CoreService.Domain.AggregateRoots.User;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
@@ -16,6 +17,12 @@ namespace CoreService.Application.Features.Command.Role.CreateSingleRole
             var response = new CreateSingleRoleCommandResponse();
             try
             {
+                if (await _unitOfWork.RoleReadRepository.FindByConditionAsNoTracking(r => r.Name == request.Name || r.ShortCode == request.ShortCode || r.Level == request.Level).AnyAsync(cancellationToken))
+                {
+                    _logger.LogError("Role fields must be unique. Request: {@Request}", request);
+                    response.SetForError("Role fields must be unique", HttpStatusCode.BadRequest);
+                    return response;
+                }
                 var (roleToCreate, errorMessage) = RoleEntity.CreateNewRole(request.Name, request.ShortCode, request.Level, request.Description);
                 if (roleToCreate == null)
                 {
