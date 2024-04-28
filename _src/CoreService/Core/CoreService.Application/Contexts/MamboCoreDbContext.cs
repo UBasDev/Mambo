@@ -16,6 +16,7 @@ namespace CoreService.Application.Contexts
         public DbSet<ProfileEntity> Profiles => Set<ProfileEntity>();
         public DbSet<RoleEntity> Roles => Set<RoleEntity>();
         public DbSet<CompanyEntity> Companies => Set<CompanyEntity>();
+        public DbSet<ScreenEntity> Screens => Set<ScreenEntity>();
         public DbSet<ProjectEntity> Projects => Set<ProjectEntity>();
         public DbSet<TaskContentCommentEntity> TaskContentComments => Set<TaskContentCommentEntity>();
         public DbSet<TaskContentEntity> TaskContents => Set<TaskContentEntity>();

@@ -1,4 +1,5 @@
-﻿using CoreService.Application.Repositories;
+﻿using CoreService.Application.Models;
+using CoreService.Application.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,11 +11,8 @@ using System.Threading.Tasks;
 
 namespace CoreService.Application.Features.Queries.Role.GetAllRoles
 {
-    internal class GetAllRolesWithoutRelationQueryHandler(ILogger<GetAllRolesWithoutRelationQueryHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<GetAllRolesWithoutRelationQueryRequest, GetAllRolesWithoutRelationQueryResponse>
+    internal class GetAllRolesWithoutRelationQueryHandler(ILogger<GetAllRolesWithoutRelationQueryHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsHandler<GetAllRolesWithoutRelationQueryHandler>(logger, unitOfWork), IRequestHandler<GetAllRolesWithoutRelationQueryRequest, GetAllRolesWithoutRelationQueryResponse>
     {
-        private readonly ILogger<GetAllRolesWithoutRelationQueryHandler> _logger = logger;
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<GetAllRolesWithoutRelationQueryResponse> Handle(GetAllRolesWithoutRelationQueryRequest request, CancellationToken cancellationToken)
         {
             var response = new GetAllRolesWithoutRelationQueryResponse();
@@ -24,8 +22,8 @@ namespace CoreService.Application.Features.Queries.Role.GetAllRoles
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unable to create this role. Request: {@Request} Error: {@Error}", request, ex);
-                response.SetForError("Unexpected error happened while creating this role", HttpStatusCode.InternalServerError);
+                LogError("Unable to get roles", ex, request, HttpStatusCode.InternalServerError);
+                response.SetForError("Unexpected error happened while retrieving roles", HttpStatusCode.InternalServerError);
             }
             return response;
         }

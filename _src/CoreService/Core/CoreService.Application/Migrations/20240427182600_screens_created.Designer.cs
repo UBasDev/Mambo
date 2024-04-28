@@ -3,6 +3,7 @@ using System;
 using CoreService.Application.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoreService.Application.Migrations
 {
     [DbContext(typeof(MamboCoreDbContext))]
-    partial class MamboCoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240427182600_screens_created")]
+    partial class screens_created
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
