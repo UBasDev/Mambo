@@ -17,6 +17,7 @@ namespace CoreService.Domain.AggregateRoots.User
             RoleId = null;
             Profile = null;
             Projects = new HashSet<ProjectEntity>();
+            Screens = new HashSet<ScreenEntity>();
             DeletedAt = null;
             IsActive = true;
             IsDeleted = false;
@@ -32,6 +33,7 @@ namespace CoreService.Domain.AggregateRoots.User
         public Guid? RoleId { get; private set; }
         public ProfileEntity? Profile { get; private set; }
         public ICollection<ProjectEntity> Projects { get; private set; }
+        public ICollection<ScreenEntity> Screens { get; private set; }
         public DateTimeOffset? DeletedAt { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }

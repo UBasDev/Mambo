@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mambo.Response
 {
-    public class BaseResponse
+    public class BaseResponse : IBaseResponse
     {
         public BaseResponse()
         {
@@ -36,7 +36,7 @@ namespace Mambo.Response
         public void SetRequestId(string requestId) => RequestId = requestId;
     }
 
-    public class BaseResponse<T>
+    public class BaseResponse<T> : IBaseResponse
     {
         public BaseResponse()
         {

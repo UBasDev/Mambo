@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mambo.Response
+namespace CoreService.Application.Features.Command.User.CreateSingleUser
 {
-    internal class BaseResponseRoot
+    internal class CreateSingleUserCommandResponse
     {
     }
 }

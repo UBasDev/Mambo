@@ -1,4 +1,5 @@
-﻿using CoreService.Application.Repositories;
+﻿using CoreService.Application.Models;
+using CoreService.Application.Repositories;
 using CoreService.Domain.AggregateRoots.User;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,8 @@ using System.Net;
 
 namespace CoreService.Application.Features.Command.Role.CreateSingleRole
 {
-    public class CreateSingleRoleCommandHandler(ILogger<CreateSingleRoleCommandHandler> logger, IUnitOfWork unitOfWork) : IRequestHandler<CreateSingleRoleCommandRequest, CreateSingleRoleCommandResponse>
+    internal class CreateSingleRoleCommandHandler(ILogger<CreateSingleRoleCommandHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsHandler<CreateSingleRoleCommandHandler>(logger, unitOfWork), IRequestHandler<CreateSingleRoleCommandRequest, CreateSingleRoleCommandResponse>
     {
-        private readonly ILogger<CreateSingleRoleCommandHandler> _logger = logger;
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
         public async Task<CreateSingleRoleCommandResponse> Handle(CreateSingleRoleCommandRequest request, CancellationToken cancellationToken)
         {
             var response = new CreateSingleRoleCommandResponse();
@@ -19,14 +17,14 @@ namespace CoreService.Application.Features.Command.Role.CreateSingleRole
             {
                 if (await _unitOfWork.RoleReadRepository.FindByConditionAsNoTracking(r => r.Name == request.Name || r.ShortCode == request.ShortCode || r.Level == request.Level).AnyAsync(cancellationToken))
                 {
-                    _logger.LogError("Role fields must be unique. Request: {@Request}", request);
+                    LogWarning("Role fields must be unique", request, HttpStatusCode.BadRequest);
                     response.SetForError("Role fields must be unique", HttpStatusCode.BadRequest);
                     return response;
                 }
                 var (roleToCreate, errorMessage) = RoleEntity.CreateNewRole(request.Name, request.ShortCode, request.Level, request.Description);
                 if (roleToCreate == null)
                 {
-                    _logger.LogError("Unable to create this role. Request: {@Request} Error: {@Error}", request, errorMessage);
+                    LogWarning("Unable to create this role", errorMessage, request, HttpStatusCode.BadRequest);
                     response.SetForError(errorMessage, HttpStatusCode.BadRequest);
                     return response;
                 }
@@ -35,7 +33,7 @@ namespace CoreService.Application.Features.Command.Role.CreateSingleRole
             }
             catch (Exception ex)
             {
-                _logger.LogError("Unable to create this role. Request: {@Request} Error: {@Error}", request, ex);
+                LogError("Unable to create this role", ex, request, HttpStatusCode.InternalServerError);
                 response.SetForError("Unexpected error happened while creating this role", HttpStatusCode.InternalServerError);
             }
             return response;

@@ -76,7 +76,7 @@ app.MapGet("healthcheck", () => Results.Ok()).ShortCircuit();
 #endregion healthcheck
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (environment != "Production")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
