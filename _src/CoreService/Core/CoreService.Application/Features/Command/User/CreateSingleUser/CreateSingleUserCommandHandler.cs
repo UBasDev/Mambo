@@ -1,17 +1,61 @@
-﻿using MediatR;
+﻿using CoreService.Application.Models;
+using CoreService.Application.Repositories;
+using CoreService.Domain.AggregateRoots.User;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CoreService.Application.Features.Command.User.CreateSingleUser
 {
-    internal class CreateSingleUserCommandHandler : IRequestHandler<CreateSingleUserCommandRequest, CreateSingleUserCommandResponse>
+    internal class CreateSingleUserCommandHandler(ILogger<CreateSingleUserCommandHandler> logger, IUnitOfWork unitOfWork, IPublisher publisher) : BaseCqrsAndDomainEventHandler<CreateSingleUserCommandHandler>(logger, unitOfWork), IRequestHandler<CreateSingleUserCommandRequest, CreateSingleUserCommandResponse>
     {
+        private readonly IPublisher _publisher = publisher;
+
         public async Task<CreateSingleUserCommandResponse> Handle(CreateSingleUserCommandRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = new CreateSingleUserCommandResponse();
+            try
+            {
+                var isUsernameOrEmailAlreadyExist = await _unitOfWork.UserReadRepository.FindByConditionAsNoTracking(u => u.Username == request.Username || u.Email == request.Email).AnyAsync(cancellationToken);
+                if (isUsernameOrEmailAlreadyExist)
+                {
+                    LogWarning("This email or username already exists", request, HttpStatusCode.BadRequest);
+                    response.SetForError("This email or username already exists", HttpStatusCode.BadRequest);
+                    return response;
+                }
+                var (userToCreate, errorMessage) = UserEntity.CreateNewUserEntity(request.Username, request.Email, request.Password);
+                if (userToCreate == null)
+                {
+                    LogWarning("Unable to create this user", errorMessage, request, HttpStatusCode.BadRequest);
+                    response.SetForError(errorMessage, HttpStatusCode.BadRequest);
+                    return response;
+                }
+                await _unitOfWork.UserWriteRepository.InsertSingleAsync(userToCreate, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                var errorMessageWhileSettingProfile = userToCreate.SetProfileAfterUserCreated(userToCreate.Id, request.Firstname, request.Lastname, request.CompanyName);
+                if (errorMessageWhileSettingProfile != null)
+                {
+                    LogWarning(errorMessageWhileSettingProfile, request, HttpStatusCode.BadRequest);
+                    response.SetForError(errorMessageWhileSettingProfile, HttpStatusCode.BadRequest);
+                    return response;
+                }
+                foreach (var currentEvent in userToCreate.DomainEvents)
+                {
+                    await _publisher.Publish(currentEvent, cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("Unable to create this user", ex, request, HttpStatusCode.InternalServerError);
+                response.SetForError("Unexpected error happened while creating this user", HttpStatusCode.InternalServerError);
+            }
+            return response;
         }
     }
 }

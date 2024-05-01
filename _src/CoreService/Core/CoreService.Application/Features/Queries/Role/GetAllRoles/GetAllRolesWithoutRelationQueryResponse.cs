@@ -27,7 +27,7 @@ namespace CoreService.Application.Features.Queries.Role.GetAllRoles
             UpdatedAt = null;
         }
 
-        public GetAllRolesQueryResponseModel(Guid id, string name, string shortCode, UInt16 level, string? description, DateTimeOffset createdAt, DateTimeOffset? deletedAt, bool isActive, bool isDeleted, DateTimeOffset? updatedAt)
+        private GetAllRolesQueryResponseModel(Guid id, string name, string shortCode, UInt16 level, string? description, DateTimeOffset createdAt, DateTimeOffset? deletedAt, bool isActive, bool isDeleted, DateTimeOffset? updatedAt)
         {
             Id = id;
             Name = name;

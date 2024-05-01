@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CoreService.Application.Models
 {
-    internal abstract class BaseCqrsHandler<T>(ILogger<T> logger, IUnitOfWork unitOfWork) where T : class
+    internal abstract class BaseCqrsAndDomainEventHandler<T>(ILogger<T> logger, IUnitOfWork unitOfWork) where T : class
     {
         protected readonly ILogger<T> _logger = logger;
         protected readonly IUnitOfWork _unitOfWork = unitOfWork;

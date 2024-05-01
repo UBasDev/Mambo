@@ -1,4 +1,5 @@
 ﻿using CoreService.Application.Contexts;
+using MediatR.NotificationPublishers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -23,6 +24,7 @@ namespace CoreService.Application.Registrations
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.NotificationPublisher = new ForeachAwaitPublisher();
             });
 
             #endregion MediatR

@@ -9,32 +9,24 @@ using System.Threading;
 namespace CoreService.API.Controllers
 {
     [Route("api/v1/[controller]")]
-    public class RolesController(IMediator mediator) : BaseController
+    public class RolesController(IMediator mediator) : BaseController(mediator)
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpPost("create-single-role")]
         public async Task<CreateSingleRoleCommandResponse> CreateSingleRole([FromBody] CreateSingleRoleCommandRequest requestBody, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(requestBody, cancellationToken);
-            this.SetResponseBeforeSend(response);
-            return response;
+            return await SetResponse<CreateSingleRoleCommandRequest, CreateSingleRoleCommandResponse>(requestBody);
         }
 
         [HttpGet("get-all-roles-without-relation")]
         public async Task<GetAllRolesWithoutRelationQueryResponse> GetAllRolesWithoutRelation(CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(new GetAllRolesWithoutRelationQueryRequest(), cancellationToken);
-            this.SetResponseBeforeSend(response);
-            return response;
+            return await SetResponse<GetAllRolesWithoutRelationQueryRequest, GetAllRolesWithoutRelationQueryResponse>(new GetAllRolesWithoutRelationQueryRequest());
         }
 
         [HttpPost("get-single-role-by-id")]
         public async Task<GetSingleRoleByIdQueryResponse> GetSingleRoleById([FromBody] GetSingleRoleByIdQueryRequest requestBody, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(requestBody, cancellationToken);
-            this.SetResponseBeforeSend(response);
-            return response;
+            return await SetResponse<GetSingleRoleByIdQueryRequest, GetSingleRoleByIdQueryResponse>(requestBody);
         }
     }
 }
