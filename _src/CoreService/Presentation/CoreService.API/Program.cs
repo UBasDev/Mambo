@@ -1,3 +1,4 @@
+using CoreService.API;
 using CoreService.API.Registrations;
 using CoreService.Application.Models;
 using CoreService.Application.Registrations;
@@ -49,6 +50,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationRegistrations(appSettings.MamboCoreDbConnectionString);
 builder.Services.AddPresentationRegistrations(appSettings.JwtSettings);
 builder.Services.AddPersistenceRegistrations();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Host.UseSerilog();
 
@@ -87,6 +89,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseExceptionHandler(_ => { });
 app.Run();
 
 #region Serilog

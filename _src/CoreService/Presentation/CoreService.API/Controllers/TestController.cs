@@ -22,6 +22,13 @@ namespace CoreService.API.Controllers
             return Ok();
         }
 
+        [HttpGet("exception1")]
+        public IActionResult Exception1()
+        {
+            throw new Exception("Text11 exception11");
+            return Ok();
+        }
+
         [HttpGet("info1")]
         public IActionResult Info1()
         {
