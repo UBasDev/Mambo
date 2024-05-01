@@ -7,12 +7,28 @@ namespace CoreService.Domain.AggregateRoots.User
     {
         public ProfileEntity()
         {
-            Age = 0;
+            Age = null;
             Firstname = string.Empty;
             Lastname = string.Empty;
-            BirthDate = DateTimeOffset.UtcNow;
+            BirthDate = null;
             User = null;
             UserId = null;
+            Company = null;
+            CompanyId = null;
+            DeletedAt = null;
+            IsActive = true;
+            IsDeleted = false;
+            UpdatedAt = null;
+        }
+
+        private ProfileEntity(string firstname, string lastname, Guid userId)
+        {
+            Firstname = firstname;
+            Lastname = lastname;
+            UserId = userId;
+            Age = null;
+            BirthDate = null;
+            User = null;
             Company = null;
             CompanyId = null;
             DeletedAt = null;
@@ -35,5 +51,15 @@ namespace CoreService.Domain.AggregateRoots.User
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
         public DateTimeOffset? UpdatedAt { get; private set; }
+
+        public static (ProfileEntity? profileEntity, string? errorMessage) CreateNewProfileEntityWithoutAgeAndBirthDate(string firstname, string lastname, Guid userId)
+        {
+            if (string.IsNullOrEmpty(firstname)) return (null, "Firstname can't be empty");
+            if (string.IsNullOrEmpty(lastname)) return (null, "Lastname can't be empty");
+            if (string.IsNullOrEmpty(userId.ToString())) return (null, "User id can't be empty");
+            return (new ProfileEntity(firstname, lastname, userId), null);
+        }
+
+        public void SetCompanyId(Guid companyId) => CompanyId = companyId;
     }
 }

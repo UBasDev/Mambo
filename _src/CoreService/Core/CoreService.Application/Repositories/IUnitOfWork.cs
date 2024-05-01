@@ -1,4 +1,7 @@
-﻿using CoreService.Application.Repositories.RoleRepository;
+﻿using CoreService.Application.Repositories.CompanyRepository;
+using CoreService.Application.Repositories.ProfileRepository;
+using CoreService.Application.Repositories.RoleRepository;
+using CoreService.Application.Repositories.UserRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +18,11 @@ namespace CoreService.Application.Repositories
 
         IRoleReadRepository RoleReadRepository { get; }
         IRoleWriteRepository RoleWriteRepository { get; }
+        IUserReadRepository UserReadRepository { get; }
+        IUserWriteRepository UserWriteRepository { get; }
+        IProfileReadRepository ProfileReadRepository { get; }
+        IProfileWriteRepository ProfileWriteRepository { get; }
+        ICompanyReadRepository CompanyReadRepository { get; }
+        ICompanyWriteRepository CompanyWriteRepository { get; }
     }
 }

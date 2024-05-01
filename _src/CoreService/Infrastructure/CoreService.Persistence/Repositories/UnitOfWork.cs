@@ -1,12 +1,13 @@
 ﻿using CoreService.Application.Contexts;
 using CoreService.Application.Repositories;
+using CoreService.Application.Repositories.CompanyRepository;
+using CoreService.Application.Repositories.ProfileRepository;
 using CoreService.Application.Repositories.RoleRepository;
+using CoreService.Application.Repositories.UserRepository;
+using CoreService.Persistence.Repositories.CompanyRepository;
+using CoreService.Persistence.Repositories.ProfileRepository;
 using CoreService.Persistence.Repositories.RoleRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CoreService.Persistence.Repositories.UserRepository;
 
 namespace CoreService.Persistence.Repositories
 {
@@ -27,6 +28,54 @@ namespace CoreService.Persistence.Repositories
             get
             {
                 return new RoleWriteRepository(_dbContext);
+            }
+        }
+
+        public IUserReadRepository UserReadRepository
+        {
+            get
+            {
+                return new UserReadRepository(_dbContext);
+            }
+        }
+
+        public IUserWriteRepository UserWriteRepository
+        {
+            get
+            {
+                return new UserWriteRepository(_dbContext);
+            }
+        }
+
+        public IProfileReadRepository ProfileReadRepository
+        {
+            get
+            {
+                return new ProfileReadRepository(_dbContext);
+            }
+        }
+
+        public IProfileWriteRepository ProfileWriteRepository
+        {
+            get
+            {
+                return new ProfileWriteRepository(_dbContext);
+            }
+        }
+
+        public ICompanyReadRepository CompanyReadRepository
+        {
+            get
+            {
+                return new CompanyReadRepository(_dbContext);
+            }
+        }
+
+        public ICompanyWriteRepository CompanyWriteRepository
+        {
+            get
+            {
+                return new CompanyWriteRepository(_dbContext);
             }
         }
 
