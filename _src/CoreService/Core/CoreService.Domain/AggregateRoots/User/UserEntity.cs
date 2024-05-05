@@ -1,7 +1,12 @@
 ﻿using CoreService.Domain.AggregateRoots.Project;
 using CoreService.Domain.Common;
 using CoreService.Domain.DomainEvents.User;
+using Microsoft.IdentityModel.Tokens;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace CoreService.Domain.AggregateRoots.User
@@ -33,6 +38,16 @@ namespace CoreService.Domain.AggregateRoots.User
             var salt = GenerateSalt();
             PasswordSalt = Convert.ToBase64String(salt);
             PasswordHash = ComputeHash(passwordFromRequest, PasswordSalt);
+            LastLoginDate = null;
+            Role = null;
+            RoleId = null;
+            Profile = null;
+            Projects = new HashSet<ProjectEntity>();
+            Screens = new HashSet<ScreenEntity>();
+            DeletedAt = null;
+            IsActive = true;
+            IsDeleted = false;
+            UpdatedAt = null;
         }
 
         public string Username { get; private set; }
@@ -48,6 +63,16 @@ namespace CoreService.Domain.AggregateRoots.User
         public DateTimeOffset? DeletedAt { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
+
+        [GeneratedRegex(@"[0-9]+")] //Will be generated at compile time
+        private static partial Regex CompiledPasswordHasNumberRegex();
+
+        [GeneratedRegex(@"[A-Z]+")]
+        private static partial Regex CompiledPasswordHasUpperCharacterRegex();
+
+        [GeneratedRegex(@".{10,}")]
+        private static partial Regex CompiledPasswordHasMinimumCharacterRegex();
+
         public DateTimeOffset? UpdatedAt { get; private set; }
         private static readonly Regex passwordHasNumberRegex = CompiledPasswordHasNumberRegex();
         private static readonly Regex passwordHasUpperCharacterRegex = CompiledPasswordHasUpperCharacterRegex();
@@ -72,6 +97,8 @@ namespace CoreService.Domain.AggregateRoots.User
             return null;
         }
 
+        public void SetDefaultRoleId(Guid id) => RoleId = id;
+
         private static byte[] GenerateSalt()
         {
             var rng = RandomNumberGenerator.Create();
@@ -88,13 +115,42 @@ namespace CoreService.Domain.AggregateRoots.User
             return Convert.ToBase64String(bytes);
         }
 
-        [GeneratedRegex(@"[0-9]+")] //Will be generated at compile time
-        private static partial Regex CompiledPasswordHasNumberRegex();
+        public string GenerateToken(TimeSpan expireTime, string secretKey, string issuer, string audience)
+        {
+            var tokenDescriptor1 = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(
+                    new[]
+                        {
+                            new Claim("username", Username),
+                            new Claim("email", Email),
+                            new Claim("rolename", Role?.Name ?? string.Empty),
+                            new Claim("rolelevel", Role?.Level.ToString() ?? string.Empty),
+                        }
+                ),
+                Expires = DateTime.UtcNow.Add(expireTime),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
 
-        [GeneratedRegex(@"[A-Z]+")]
-        private static partial Regex CompiledPasswordHasUpperCharacterRegex();
+                    SecurityAlgorithms.HmacSha512
+                ),
+                Issuer = issuer,
 
-        [GeneratedRegex(@".{10,}")]
-        private static partial Regex CompiledPasswordHasMinimumCharacterRegex();
+                Audience = audience,
+
+                IssuedAt = DateTime.UtcNow,
+
+                TokenType = JwtRegisteredClaimNames.Typ,
+
+                NotBefore = DateTime.UtcNow
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            return tokenHandler.WriteToken(
+
+                tokenHandler.CreateToken(tokenDescriptor1) //Burada tokenı elde ederiz.
+            );
+        }
     }
 }

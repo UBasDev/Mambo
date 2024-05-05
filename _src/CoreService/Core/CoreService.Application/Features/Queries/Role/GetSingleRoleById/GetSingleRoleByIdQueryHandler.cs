@@ -6,8 +6,10 @@ using System.Net;
 
 namespace CoreService.Application.Features.Queries.Role.GetSingleRoleById
 {
-    internal class GetSingleRoleByIdQueryHandler(ILogger<GetSingleRoleByIdQueryHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<GetSingleRoleByIdQueryHandler>(logger, unitOfWork), IRequestHandler<GetSingleRoleByIdQueryRequest, GetSingleRoleByIdQueryResponse>
+    internal class GetSingleRoleByIdQueryHandler(ILogger<GetSingleRoleByIdQueryHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<GetSingleRoleByIdQueryHandler>(logger), IRequestHandler<GetSingleRoleByIdQueryRequest, GetSingleRoleByIdQueryResponse>
     {
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
         public async Task<GetSingleRoleByIdQueryResponse> Handle(GetSingleRoleByIdQueryRequest request, CancellationToken cancellationToken)
         {
             var response = new GetSingleRoleByIdQueryResponse();

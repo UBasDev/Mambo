@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace CoreService.Application.Features.Queries.Role.GetAllRoles
 {
-    internal class GetAllRolesWithoutRelationQueryHandler(ILogger<GetAllRolesWithoutRelationQueryHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<GetAllRolesWithoutRelationQueryHandler>(logger, unitOfWork), IRequestHandler<GetAllRolesWithoutRelationQueryRequest, GetAllRolesWithoutRelationQueryResponse>
+    internal class GetAllRolesWithoutRelationQueryHandler(ILogger<GetAllRolesWithoutRelationQueryHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<GetAllRolesWithoutRelationQueryHandler>(logger), IRequestHandler<GetAllRolesWithoutRelationQueryRequest, GetAllRolesWithoutRelationQueryResponse>
     {
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
         public async Task<GetAllRolesWithoutRelationQueryResponse> Handle(GetAllRolesWithoutRelationQueryRequest request, CancellationToken cancellationToken)
         {
             var response = new GetAllRolesWithoutRelationQueryResponse();
