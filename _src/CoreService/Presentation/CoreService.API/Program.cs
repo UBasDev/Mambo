@@ -37,18 +37,12 @@ SetCustomLogger(configuration, environment, appSettings.ElasticsearchSettings.El
 
 #endregion Serilog
 
-#region Prometheus
-
-builder.Services.AddOpenTelemetryApm();
-
-#endregion Prometheus
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationRegistrations(appSettings.MamboCoreDbConnectionString);
-builder.Services.AddPresentationRegistrations(appSettings.JwtSettings);
+builder.Services.AddPresentationRegistrations(appSettings.JwtSettings, appSettings.CorsOptions);
 builder.Services.AddPersistenceRegistrations();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
@@ -76,6 +70,8 @@ app.UseOpenTelemetryApm();
 app.MapGet("healthcheck", () => Results.Ok()).ShortCircuit();
 
 #endregion healthcheck
+
+app.UsePresentationRegistrations();
 
 // Configure the HTTP request pipeline.
 if (environment != "Production")

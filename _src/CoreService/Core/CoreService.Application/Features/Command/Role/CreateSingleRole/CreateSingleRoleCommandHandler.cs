@@ -8,8 +8,10 @@ using System.Net;
 
 namespace CoreService.Application.Features.Command.Role.CreateSingleRole
 {
-    internal class CreateSingleRoleCommandHandler(ILogger<CreateSingleRoleCommandHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<CreateSingleRoleCommandHandler>(logger, unitOfWork), IRequestHandler<CreateSingleRoleCommandRequest, CreateSingleRoleCommandResponse>
+    internal class CreateSingleRoleCommandHandler(ILogger<CreateSingleRoleCommandHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<CreateSingleRoleCommandHandler>(logger), IRequestHandler<CreateSingleRoleCommandRequest, CreateSingleRoleCommandResponse>
     {
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
         public async Task<CreateSingleRoleCommandResponse> Handle(CreateSingleRoleCommandRequest request, CancellationToken cancellationToken)
         {
             var response = new CreateSingleRoleCommandResponse();

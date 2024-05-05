@@ -15,9 +15,11 @@ using System.Threading.Tasks;
 
 namespace CoreService.Application.DomainEventHandlers.User
 {
-    internal class SetProfileAfterUserCreatedEventHandler(ILogger<SetProfileAfterUserCreatedEventHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<SetProfileAfterUserCreatedEventHandler>(logger, unitOfWork), IDomainEventHandler<SetProfileAfterUserCreatedEvent>
+    internal class SetProfileAfterUserCreatedEventHandler(ILogger<SetProfileAfterUserCreatedEventHandler> logger, IUnitOfWork unitOfWork) : BaseCqrsAndDomainEventHandler<SetProfileAfterUserCreatedEventHandler>(logger), IDomainEventHandler<SetProfileAfterUserCreatedEvent>
 
     {
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
         public async Task Handle(SetProfileAfterUserCreatedEvent notification, CancellationToken cancellationToken)
         {
             try

@@ -4,6 +4,7 @@ using CoreService.Domain.AggregateRoots.User;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,9 @@ using System.Threading.Tasks;
 
 namespace CoreService.Application.Features.Command.User.CreateSingleUser
 {
-    internal class CreateSingleUserCommandHandler(ILogger<CreateSingleUserCommandHandler> logger, IUnitOfWork unitOfWork, IPublisher publisher) : BaseCqrsAndDomainEventHandler<CreateSingleUserCommandHandler>(logger, unitOfWork), IRequestHandler<CreateSingleUserCommandRequest, CreateSingleUserCommandResponse>
+    internal class CreateSingleUserCommandHandler(ILogger<CreateSingleUserCommandHandler> logger, IUnitOfWork unitOfWork, IPublisher publisher) : BaseCqrsAndDomainEventHandler<CreateSingleUserCommandHandler>(logger), IRequestHandler<CreateSingleUserCommandRequest, CreateSingleUserCommandResponse>
     {
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IPublisher _publisher = publisher;
 
         public async Task<CreateSingleUserCommandResponse> Handle(CreateSingleUserCommandRequest request, CancellationToken cancellationToken)
@@ -36,6 +38,14 @@ namespace CoreService.Application.Features.Command.User.CreateSingleUser
                     response.SetForError(errorMessage, HttpStatusCode.BadRequest);
                     return response;
                 }
+                var foundDefaultRoleId = await _unitOfWork.RoleReadRepository.FindByConditionAsNoTracking(r => r.Level == 10).Select(r => r.Id).FirstOrDefaultAsync(cancellationToken);
+                if (string.IsNullOrEmpty(foundDefaultRoleId.ToString()))
+                {
+                    LogWarning("Unable to assign default role to this user", request, HttpStatusCode.BadRequest);
+                    response.SetForError("Unable to assign default role to this user", HttpStatusCode.BadRequest);
+                    return response;
+                }
+                userToCreate.SetDefaultRoleId(foundDefaultRoleId);
                 await _unitOfWork.UserWriteRepository.InsertSingleAsync(userToCreate, cancellationToken);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 var errorMessageWhileSettingProfile = userToCreate.SetProfileAfterUserCreated(userToCreate.Id, request.Firstname, request.Lastname, request.CompanyName);
