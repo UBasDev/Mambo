@@ -117,3 +117,5 @@ static ElasticsearchSinkOptions ConfigureElasticSink(string environment, string 
 }
 
 #endregion Serilog
+
+public partial class Program;

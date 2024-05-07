@@ -69,6 +69,10 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "mamboui", "_src\_client\mam
 		SlnRelativePath = "_src\_client\mamboui\"
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5789409B-A468-4ABA-A6DA-99C70CE7EA4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService.Test", "_src\CoreService\Test\CoreService.Test\CoreService.Test.csproj", "{39C25A83-A130-4B83-B10C-B71DB1B63526}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +135,10 @@ Global
 		{3BBC3E8C-5630-406B-BA57-124A6FFB481D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BBC3E8C-5630-406B-BA57-124A6FFB481D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{3BBC3E8C-5630-406B-BA57-124A6FFB481D}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{39C25A83-A130-4B83-B10C-B71DB1B63526}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39C25A83-A130-4B83-B10C-B71DB1B63526}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39C25A83-A130-4B83-B10C-B71DB1B63526}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39C25A83-A130-4B83-B10C-B71DB1B63526}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +164,8 @@ Global
 		{120EBF7A-8438-47F5-8D77-81225F9E9E42} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
 		{D4BD33C0-3237-4F4E-9A16-8BCFA205C8D6} = {1894A329-36F0-4ECF-B569-4B8592748882}
 		{3BBC3E8C-5630-406B-BA57-124A6FFB481D} = {D4BD33C0-3237-4F4E-9A16-8BCFA205C8D6}
+		{5789409B-A468-4ABA-A6DA-99C70CE7EA4E} = {F1FA00CD-687F-4EF6-89FC-B23B9F168EAB}
+		{39C25A83-A130-4B83-B10C-B71DB1B63526} = {5789409B-A468-4ABA-A6DA-99C70CE7EA4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {401B9799-D075-4133-B58C-D9788B81BB40}

@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace CoreService.API.Controllers
 {
@@ -34,6 +36,16 @@ namespace CoreService.API.Controllers
         {
             _logger.LogInformation("Custom info88");
             return Ok();
+        }
+
+        public class Class1
+        {
+            public object? Payload { get; set; }
+            public bool IsSuccessful { get; set; }
+            public string? ErrorMessage { get; set; }
+            public string RequestId { get; set; }
+            public UInt32 ServerTime { get; set; }
+            public HttpStatusCode StatusCode { get; set; }
         }
 
         [HttpGet("debug1")]

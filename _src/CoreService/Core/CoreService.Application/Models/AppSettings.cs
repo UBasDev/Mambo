@@ -15,6 +15,8 @@ namespace CoreService.Application.Models
             JwtSettings = new JwtSettings();
             ElasticsearchSettings = new ElasticsearchSettings();
             GenerateTokenSettings = new GenerateTokenSettings();
+            CorsOptions = new CorsOptions();
+            PostgreSqlTestContainerSettings = new PostgreSqlTestContainerSettings();
         }
 
         public string MamboCoreDbConnectionString { get; set; }
@@ -22,6 +24,7 @@ namespace CoreService.Application.Models
         public GenerateTokenSettings GenerateTokenSettings { get; set; }
         public ElasticsearchSettings ElasticsearchSettings { get; set; }
         public CorsOptions CorsOptions { get; set; }
+        public PostgreSqlTestContainerSettings PostgreSqlTestContainerSettings { get; set; }
     }
 
     public class ElasticsearchSettings
@@ -60,5 +63,23 @@ namespace CoreService.Application.Models
         }
 
         public string[] AllowedOrigins { get; set; }
+    }
+
+    public class PostgreSqlTestContainerSettings
+    {
+        public PostgreSqlTestContainerSettings()
+        {
+            Username = string.Empty;
+            Password = string.Empty;
+            DatabaseName = string.Empty;
+            ImageName = string.Empty;
+            IsCleanUp = false;
+        }
+
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string DatabaseName { get; set; }
+        public string ImageName { get; set; }
+        public bool IsCleanUp { get; set; }
     }
 }

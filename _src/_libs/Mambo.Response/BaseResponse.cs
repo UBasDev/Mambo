@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Mambo.Response
 {
-    public class BaseResponse : IBaseResponse
+    public abstract class BaseResponse : IBaseResponse
     {
-        public BaseResponse()
+        protected BaseResponse()
         {
             Payload = null;
             IsSuccessful = true;
@@ -36,9 +36,9 @@ namespace Mambo.Response
         public void SetRequestId(string requestId) => RequestId = requestId;
     }
 
-    public class BaseResponse<T> : IBaseResponse
+    public abstract class BaseResponse<T> : IBaseResponse
     {
-        public BaseResponse()
+        protected BaseResponse()
         {
             if (typeof(T).IsClass && typeof(T) != typeof(string)) Payload = Activator.CreateInstance<T>();
             else Payload = default;
