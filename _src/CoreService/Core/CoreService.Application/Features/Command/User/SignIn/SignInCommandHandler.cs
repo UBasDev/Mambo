@@ -57,7 +57,7 @@ namespace CoreService.Application.Features.Command.User.SignIn
                     );
                 var allScreenNamesOfUser = foundUser.Role?.Screens?.Select(s => s.Name)?.ToHashSet() ?? new HashSet<string>();
                 response.SetPayload(
-                    SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Id, foundUser.Username, foundUser.Email, foundUser.Profile?.Firstname, foundUser.Profile?.Lastname, foundUser.Profile?.Company?.Name, allScreenNamesOfUser)
+                    SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Id, foundUser.Username, foundUser.Email, foundUser.Profile?.Firstname, foundUser.Profile?.Lastname, foundUser.Profile?.Company?.Name, foundUser.Role?.Name ?? string.Empty, allScreenNamesOfUser)
                     );
             }
             catch (Exception ex)
@@ -119,7 +119,7 @@ namespace CoreService.Application.Features.Command.User.SignIn
                     adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience)
                     );
             response.SetPayload(
-            SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Id, adminUser.Username, adminUser.Email, adminUser.Profile?.Firstname, adminUser.Profile?.Lastname, adminUser.Profile?.Company?.Name, allScreenNamesOfAdminUser)
+            SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Id, adminUser.Username, adminUser.Email, adminUser.Profile?.Firstname, adminUser.Profile?.Lastname, adminUser.Profile?.Company?.Name, adminUser.Role?.Name ?? string.Empty, allScreenNamesOfAdminUser)
             );
         }
     }
