@@ -18,6 +18,7 @@ namespace CoreService.Application.EntityConfigurations
             builder.HasIndex(r => r.ShortCode).IsUnique();
             builder.HasIndex(r => r.Level).IsUnique();
             builder.HasMany(r => r.Users).WithOne(u => u.Role);
+            builder.HasMany(r => r.Screens).WithMany(s => s.Roles).UsingEntity(join => join.ToTable("RoleScreen"));
             builder.Property(r => r.Name).HasColumnType("varchar(30)").HasMaxLength(30).IsRequired();
             builder.Property(r => r.ShortCode).HasColumnType("varchar(5)").HasMaxLength(5).IsRequired();
             builder.Property(r => r.Level).HasColumnType("smallint").IsRequired();

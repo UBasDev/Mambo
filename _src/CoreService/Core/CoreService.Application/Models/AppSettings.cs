@@ -12,6 +12,8 @@ namespace CoreService.Application.Models
         public AppSettings()
         {
             MamboCoreDbConnectionString = string.Empty;
+            UiAdminUsername = string.Empty;
+            UiAdminPassword = string.Empty;
             JwtSettings = new JwtSettings();
             ElasticsearchSettings = new ElasticsearchSettings();
             GenerateTokenSettings = new GenerateTokenSettings();
@@ -19,6 +21,8 @@ namespace CoreService.Application.Models
             PostgreSqlTestContainerSettings = new PostgreSqlTestContainerSettings();
         }
 
+        public string UiAdminUsername { get; set; }
+        public string UiAdminPassword { get; set; }
         public string MamboCoreDbConnectionString { get; set; }
         public JwtSettings JwtSettings { get; set; }
         public GenerateTokenSettings GenerateTokenSettings { get; set; }

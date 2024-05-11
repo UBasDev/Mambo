@@ -3,10 +3,12 @@ using CoreService.Application.Repositories;
 using CoreService.Application.Repositories.CompanyRepository;
 using CoreService.Application.Repositories.ProfileRepository;
 using CoreService.Application.Repositories.RoleRepository;
+using CoreService.Application.Repositories.ScreenRepository;
 using CoreService.Application.Repositories.UserRepository;
 using CoreService.Persistence.Repositories.CompanyRepository;
 using CoreService.Persistence.Repositories.ProfileRepository;
 using CoreService.Persistence.Repositories.RoleRepository;
+using CoreService.Persistence.Repositories.ScreenRepository;
 using CoreService.Persistence.Repositories.UserRepository;
 
 namespace CoreService.Persistence.Repositories
@@ -76,6 +78,22 @@ namespace CoreService.Persistence.Repositories
             get
             {
                 return new CompanyWriteRepository(_dbContext);
+            }
+        }
+
+        public IScreenReadRepository ScreenReadRepository
+        {
+            get
+            {
+                return new ScreenReadRepository(_dbContext);
+            }
+        }
+
+        public IScreenWriteRepository ScreenWriteRepository
+        {
+            get
+            {
+                return new ScreenWriteRepository(_dbContext);
             }
         }
 

@@ -11,7 +11,7 @@ namespace CoreService.API.Controllers
     {
         private readonly IMediator _mediator = mediator;
 
-        protected async Task<TResponse> SetResponse<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse> where TResponse : IBaseResponse
+        protected async Task<TResponse> SetResponseAsync<TRequest, TResponse>(TRequest request) where TRequest : IRequest<TResponse> where TResponse : IBaseResponse
         {
             var response = await _mediator.Send(request);
             if (!response.IsSuccessful) Response.StatusCode = (int)response.StatusCode;

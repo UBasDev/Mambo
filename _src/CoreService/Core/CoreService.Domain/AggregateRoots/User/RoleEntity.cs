@@ -13,6 +13,7 @@ namespace CoreService.Domain.AggregateRoots.User
             Level = 0;
             Description = string.Empty;
             Users = new HashSet<UserEntity>();
+            Screens = new HashSet<ScreenEntity>();
             DeletedAt = null;
             IsActive = true;
             IsDeleted = false;
@@ -26,6 +27,7 @@ namespace CoreService.Domain.AggregateRoots.User
             Level = level;
             Description = description;
             Users = new HashSet<UserEntity>();
+            Screens = new HashSet<ScreenEntity>();
             DeletedAt = null;
             IsActive = true;
             IsDeleted = false;
@@ -40,6 +42,7 @@ namespace CoreService.Domain.AggregateRoots.User
 
         public string? Description { get; private set; }
         public ICollection<UserEntity> Users { get; private set; }
+        public ICollection<ScreenEntity> Screens { get; private set; }
         public DateTimeOffset? DeletedAt { get; private set; }
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
@@ -51,6 +54,13 @@ namespace CoreService.Domain.AggregateRoots.User
             else if (string.IsNullOrEmpty(shortCode)) return (null, DomainErrorStorage.RoleErrors.ShortCodeNotValid);
             else if (level < 1 || level > 5000) return (null, DomainErrorStorage.RoleErrors.LevelNotValid);
             return (new RoleEntity(name, shortCode, level, description), null);
+        }
+
+        public string? AddSingleScreenToCurrentRole(ScreenEntity screenToAdd)
+        {
+            if (screenToAdd == null) return "Screen can't be null";
+            Screens.Add(screenToAdd);
+            return null;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CoreService.Domain.AggregateRoots.Project;
+﻿using CoreService.Application.EntityConfigurations;
+using CoreService.Domain.AggregateRoots.Project;
 using CoreService.Domain.AggregateRoots.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -23,15 +24,26 @@ namespace CoreService.Application.Contexts
         public DbSet<TaskDetailEntity> TaskDetails => Set<TaskDetailEntity>();
         public DbSet<TaskEntity> Tasks => Set<TaskEntity>();
         public DbSet<TaskFieldEntity> TaskFields => Set<TaskFieldEntity>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new CompanyEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ProfileEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ProjectEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ScreenEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new TaskContentCommentEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new TaskContentEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new TaskDetailEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new TaskEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new TaskFieldEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+        }
+
         /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
         }
 
         public override EntityEntry<TEntity> Remove<TEntity>(TEntity entity)

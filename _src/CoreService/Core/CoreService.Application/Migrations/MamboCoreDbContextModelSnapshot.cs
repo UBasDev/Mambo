@@ -42,12 +42,16 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Projects");
                 });
@@ -63,7 +67,8 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("CommenterName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -73,6 +78,7 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
@@ -112,7 +118,7 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
@@ -136,25 +142,25 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("CurrentPriority")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("CurrentStatus")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("PriorityList")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("RelatedTaskIdList")
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<Guid>("ReporterUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("StatusList")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<Guid?>("TaskId")
                         .HasColumnType("uuid");
@@ -212,14 +218,14 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<Guid?>("TaskId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -235,7 +241,8 @@ namespace CoreService.Application.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Adress")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -244,7 +251,8 @@ namespace CoreService.Application.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(250)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -254,12 +262,16 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Companies");
                 });
@@ -270,8 +282,8 @@ namespace CoreService.Application.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("Age")
-                        .HasColumnType("integer");
+                    b.Property<short?>("Age")
+                        .HasColumnType("smallint");
 
                     b.Property<DateTimeOffset?>("BirthDate")
                         .HasColumnType("timestamp with time zone");
@@ -287,7 +299,8 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Firstname")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -297,7 +310,8 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Lastname")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -328,7 +342,8 @@ namespace CoreService.Application.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -336,21 +351,32 @@ namespace CoreService.Application.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("Level")
-                        .HasColumnType("integer");
+                    b.Property<short>("Level")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.Property<string>("ShortCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Level")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("ShortCode")
+                        .IsUnique();
 
                     b.ToTable("Roles");
                 });
@@ -375,19 +401,30 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
-                    b.Property<int>("OrderNumber")
-                        .HasColumnType("integer");
+                    b.Property<short>("OrderNumber")
+                        .HasColumnType("smallint");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("OrderNumber")
+                        .IsUnique();
+
+                    b.HasIndex("Value")
+                        .IsUnique();
 
                     b.ToTable("Screens");
                 });
@@ -406,7 +443,8 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -433,11 +471,16 @@ namespace CoreService.Application.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email");
+
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("Username");
 
                     b.ToTable("Users");
                 });
@@ -454,7 +497,22 @@ namespace CoreService.Application.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ProjectEntityUserEntity");
+                    b.ToTable("UserProject", (string)null);
+                });
+
+            modelBuilder.Entity("RoleEntityScreenEntity", b =>
+                {
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ScreensId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("RolesId", "ScreensId");
+
+                    b.HasIndex("ScreensId");
+
+                    b.ToTable("RoleScreen", (string)null);
                 });
 
             modelBuilder.Entity("ScreenEntityUserEntity", b =>
@@ -469,7 +527,7 @@ namespace CoreService.Application.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("ScreenEntityUserEntity");
+                    b.ToTable("UserScreen", (string)null);
                 });
 
             modelBuilder.Entity("CoreService.Domain.AggregateRoots.Project.TaskContentCommentEntity", b =>
@@ -552,6 +610,21 @@ namespace CoreService.Application.Migrations
                     b.HasOne("CoreService.Domain.AggregateRoots.User.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RoleEntityScreenEntity", b =>
+                {
+                    b.HasOne("CoreService.Domain.AggregateRoots.User.RoleEntity", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CoreService.Domain.AggregateRoots.User.ScreenEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ScreensId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

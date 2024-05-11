@@ -21,6 +21,7 @@ namespace CoreService.Test.Mock.User
             Firstname = string.Empty;
             Lastname = string.Empty;
             CompanyName = string.Empty;
+            Screens = new HashSet<string>();
         }
 
         public Guid Id { get; set; }
@@ -29,5 +30,6 @@ namespace CoreService.Test.Mock.User
         public string? Firstname { get; set; }
         public string? Lastname { get; set; }
         public string? CompanyName { get; set; }
+        public ICollection<string> Screens { get; set; }
     }
 }
