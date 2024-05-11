@@ -4,14 +4,14 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-authorized1',
   standalone: true,
   imports: [CommonModule, ButtonModule, RouterModule],
   template: `
-    <p class="text-red-500 text-2xl">Home works!</p>
-    <p-button label="Go to authorize page" routerLink="/authorized1"></p-button>
+    <p>Authorized1 works!</p>
+    <p-button label="Go to homepage" routerLink="/"></p-button>
   `,
-  styleUrl: './Home.component.css',
+  styleUrl: './Authorized1.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {}
+export class Authorized1Component {}

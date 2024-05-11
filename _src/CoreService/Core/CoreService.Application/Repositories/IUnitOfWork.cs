@@ -1,6 +1,7 @@
 ﻿using CoreService.Application.Repositories.CompanyRepository;
 using CoreService.Application.Repositories.ProfileRepository;
 using CoreService.Application.Repositories.RoleRepository;
+using CoreService.Application.Repositories.ScreenRepository;
 using CoreService.Application.Repositories.UserRepository;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,7 @@ namespace CoreService.Application.Repositories
         IProfileWriteRepository ProfileWriteRepository { get; }
         ICompanyReadRepository CompanyReadRepository { get; }
         ICompanyWriteRepository CompanyWriteRepository { get; }
+        IScreenReadRepository ScreenReadRepository { get; }
+        IScreenWriteRepository ScreenWriteRepository { get; }
     }
 }

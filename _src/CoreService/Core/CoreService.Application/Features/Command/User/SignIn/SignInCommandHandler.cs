@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Threading;
 
 namespace CoreService.Application.Features.Command.User.SignIn
 {
@@ -21,10 +22,15 @@ namespace CoreService.Application.Features.Command.User.SignIn
             var response = new SignInCommandResponse();
             try
             {
+                if (request.EmailOrUsername == _appSettings.UiAdminUsername && request.Password == _appSettings.UiAdminPassword)
+                {
+                    await HandleForAdminUserAsync(request, response, cancellationToken);
+                    return response;
+                }
                 var checkUser = await _unitOfWork.UserReadRepository.FindByConditionAsNoTracking(u => u.Email == request.EmailOrUsername || u.Username == request.EmailOrUsername).Select(u => new
                 {
-                    PasswordHash = u.PasswordHash,
-                    PasswordSalt = u.PasswordSalt
+                    u.PasswordHash,
+                    u.PasswordSalt
                 }).FirstOrDefaultAsync(cancellationToken);
                 if (checkUser == null)
                 {
@@ -38,7 +44,7 @@ namespace CoreService.Application.Features.Command.User.SignIn
                     response.SetForError("Your password is wrong", HttpStatusCode.BadRequest);
                     return response;
                 }
-                var foundUser = await _unitOfWork.UserReadRepository.FindByConditionAsNoTracking(u => u.Email == request.EmailOrUsername || u.Username == request.EmailOrUsername).Include(u => u.Profile).ThenInclude(p => p.Company).Include(u => u.Role).FirstOrDefaultAsync(cancellationToken);
+                var foundUser = await _unitOfWork.UserReadRepository.FindByConditionAsNoTracking(u => u.Email == request.EmailOrUsername || u.Username == request.EmailOrUsername).Include(u => u.Profile).ThenInclude(p => p.Company).Include(u => u.Role).ThenInclude(r => r.Screens).FirstOrDefaultAsync(cancellationToken);
                 if (foundUser == null)
                 {
                     LogWarning("Something went wrong while retrieving your user information", request, HttpStatusCode.BadRequest);
@@ -49,8 +55,9 @@ namespace CoreService.Application.Features.Command.User.SignIn
                     foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience),
                     foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience)
                     );
+                var allScreenNamesOfUser = foundUser.Role?.Screens?.Select(s => s.Name)?.ToHashSet() ?? new HashSet<string>();
                 response.SetPayload(
-                    SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Id, foundUser.Username, foundUser.Email, foundUser.Profile?.Firstname, foundUser.Profile?.Lastname, foundUser.Profile?.Company?.Name)
+                    SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Id, foundUser.Username, foundUser.Email, foundUser.Profile?.Firstname, foundUser.Profile?.Lastname, foundUser.Profile?.Company?.Name, allScreenNamesOfUser)
                     );
             }
             catch (Exception ex)
@@ -94,6 +101,25 @@ namespace CoreService.Application.Features.Command.User.SignIn
                     MaxAge = TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime),
                     Path = "/"
                 }
+            );
+        }
+
+        private async Task HandleForAdminUserAsync(SignInCommandRequest request, SignInCommandResponse response, CancellationToken cancellationToken)
+        {
+            var adminUser = await _unitOfWork.UserReadRepository.FindByConditionAsNoTracking(u => u.Username == request.EmailOrUsername).Include(u => u.Profile).ThenInclude(p => p.Company).Include(u => u.Role).FirstOrDefaultAsync(cancellationToken);
+            if (adminUser is null)
+            {
+                LogWarning("Your admin credentials are wrong", request, HttpStatusCode.BadRequest);
+                response.SetForError("Your admin credentials are wrong", HttpStatusCode.BadRequest);
+                return;
+            }
+            var allScreenNamesOfAdminUser = await _unitOfWork.ScreenReadRepository.GetOnlyScreenNamesAsNoTrackingAsync(cancellationToken);
+            SetCookiesToResponse(
+                    adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience),
+                    adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience)
+                    );
+            response.SetPayload(
+            SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Id, adminUser.Username, adminUser.Email, adminUser.Profile?.Firstname, adminUser.Profile?.Lastname, adminUser.Profile?.Company?.Name, allScreenNamesOfAdminUser)
             );
         }
     }

@@ -26,10 +26,7 @@ namespace CoreService.Test
 
         public CreateWebApplicationFactory()
         {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "Configurations"))
-                .AddJsonFile(path: $"appsettings.Local.json", optional: false, reloadOnChange: true)
-            .Build();
+            var configuration = CreateNewConfigurationBuilder();
 
             var appSettings = new AppSettings();
             configuration.Bind(nameof(AppSettings), appSettings);
@@ -68,5 +65,10 @@ namespace CoreService.Test
         {
             return _dbContainer.StopAsync();
         }
+
+        private static IConfigurationRoot CreateNewConfigurationBuilder() => new ConfigurationBuilder()
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "Configurations"))
+                .AddJsonFile(path: $"appsettings.Local.json", optional: false, reloadOnChange: true)
+            .Build();
     }
 }

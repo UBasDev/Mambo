@@ -12,13 +12,13 @@ namespace CoreService.API.Controllers
         [HttpPost("create-single-user")]
         public async Task<CreateSingleUserCommandResponse> CreateSingleUser([FromBody] CreateSingleUserCommandRequest requestBody)
         {
-            return await SetResponse<CreateSingleUserCommandRequest, CreateSingleUserCommandResponse>(requestBody);
+            return await SetResponseAsync<CreateSingleUserCommandRequest, CreateSingleUserCommandResponse>(requestBody);
         }
 
         [HttpPost("sign-in")]
         public async Task<SignInCommandResponse> SignIn([FromBody] SignInCommandRequest requestBody)
         {
-            return await SetResponse<SignInCommandRequest, SignInCommandResponse>(requestBody);
+            return await SetResponseAsync<SignInCommandRequest, SignInCommandResponse>(requestBody);
         }
     }
 }

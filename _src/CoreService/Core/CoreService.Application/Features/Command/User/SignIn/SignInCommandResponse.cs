@@ -21,9 +21,10 @@ namespace CoreService.Application.Features.Command.User.SignIn
             Firstname = string.Empty;
             Lastname = string.Empty;
             CompanyName = string.Empty;
+            Screens = new HashSet<string>();
         }
 
-        private SignInCommandResponseModel(Guid id, string username, string email, string? firstname, string? lastname, string? companyName)
+        private SignInCommandResponseModel(Guid id, string username, string email, string? firstname, string? lastname, string? companyName, ICollection<string> screens)
         {
             Id = id;
             Username = username;
@@ -31,6 +32,7 @@ namespace CoreService.Application.Features.Command.User.SignIn
             Firstname = firstname;
             Lastname = lastname;
             CompanyName = companyName;
+            Screens = screens;
         }
 
         public Guid Id { get; private set; }
@@ -39,7 +41,8 @@ namespace CoreService.Application.Features.Command.User.SignIn
         public string? Firstname { get; private set; }
         public string? Lastname { get; private set; }
         public string? CompanyName { get; private set; }
+        public ICollection<string> Screens { get; set; }
 
-        public static SignInCommandResponseModel CreateNewSignInCommandResponseModel(Guid id, string username, string email, string? firstname, string? lastname, string? companyName) => new SignInCommandResponseModel(id, username, email, firstname, lastname, companyName);
+        public static SignInCommandResponseModel CreateNewSignInCommandResponseModel(Guid id, string username, string email, string? firstname, string? lastname, string? companyName, HashSet<string> screens) => new SignInCommandResponseModel(id, username, email, firstname, lastname, companyName, screens);
     }
 }

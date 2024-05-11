@@ -16,9 +16,9 @@ namespace CoreService.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Adress = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", maxLength: 100, nullable: true),
+                    Adress = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -35,7 +35,7 @@ namespace CoreService.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -52,10 +52,10 @@ namespace CoreService.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    ShortCode = table.Column<string>(type: "text", nullable: false),
-                    Level = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
+                    ShortCode = table.Column<string>(type: "varchar(5)", maxLength: 5, nullable: false),
+                    Level = table.Column<short>(type: "smallint", nullable: false),
+                    Description = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -65,6 +65,25 @@ namespace CoreService.Application.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Screens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
+                    Value = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
+                    OrderNumber = table.Column<short>(type: "smallint", nullable: false),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Screens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,8 +114,8 @@ namespace CoreService.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
+                    Username = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
+                    Email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     PasswordSalt = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     LastLoginDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -118,11 +137,35 @@ namespace CoreService.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoleScreen",
+                columns: table => new
+                {
+                    RolesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScreensId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleScreen", x => new { x.RolesId, x.ScreensId });
+                    table.ForeignKey(
+                        name: "FK_RoleScreen_Roles_RolesId",
+                        column: x => x.RolesId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleScreen_Screens_ScreensId",
+                        column: x => x.ScreensId,
+                        principalTable: "Screens",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaskContents",
                 columns: table => new
                 {
                     Id = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "varchar(100)", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     TaskId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
@@ -144,11 +187,11 @@ namespace CoreService.Application.Migrations
                     Id = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
                     AssignedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ReporterUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PriorityList = table.Column<string>(type: "text", nullable: false),
-                    CurrentPriority = table.Column<string>(type: "text", nullable: false),
-                    StatusList = table.Column<string>(type: "text", nullable: false),
-                    CurrentStatus = table.Column<string>(type: "text", nullable: false),
-                    RelatedTaskIdList = table.Column<string>(type: "text", nullable: true),
+                    PriorityList = table.Column<string>(type: "varchar(250)", nullable: false),
+                    CurrentPriority = table.Column<string>(type: "varchar(50)", nullable: false),
+                    StatusList = table.Column<string>(type: "varchar(500)", nullable: false),
+                    CurrentStatus = table.Column<string>(type: "varchar(50)", nullable: false),
+                    RelatedTaskIdList = table.Column<string>(type: "varchar(500)", nullable: true),
                     TaskId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
@@ -167,8 +210,8 @@ namespace CoreService.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Value = table.Column<string>(type: "varchar(50)", nullable: false),
                     TaskId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
@@ -187,9 +230,9 @@ namespace CoreService.Application.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Age = table.Column<int>(type: "integer", nullable: true),
-                    Firstname = table.Column<string>(type: "text", nullable: false),
-                    Lastname = table.Column<string>(type: "text", nullable: false),
+                    Age = table.Column<short>(type: "smallint", nullable: true),
+                    Firstname = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Lastname = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     BirthDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CompanyId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -215,7 +258,7 @@ namespace CoreService.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectEntityUserEntity",
+                name: "UserProject",
                 columns: table => new
                 {
                     ProjectsId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -223,15 +266,39 @@ namespace CoreService.Application.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectEntityUserEntity", x => new { x.ProjectsId, x.UsersId });
+                    table.PrimaryKey("PK_UserProject", x => new { x.ProjectsId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_ProjectEntityUserEntity_Projects_ProjectsId",
+                        name: "FK_UserProject_Projects_ProjectsId",
                         column: x => x.ProjectsId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProjectEntityUserEntity_Users_UsersId",
+                        name: "FK_UserProject_Users_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserScreen",
+                columns: table => new
+                {
+                    ScreensId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UsersId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserScreen", x => new { x.ScreensId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_UserScreen_Screens_ScreensId",
+                        column: x => x.ScreensId,
+                        principalTable: "Screens",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserScreen_Users_UsersId",
                         column: x => x.UsersId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -244,8 +311,8 @@ namespace CoreService.Application.Migrations
                 {
                     Id = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
                     CommenterId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CommenterName = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    CommenterName = table.Column<string>(type: "varchar(100)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "text", maxLength: 100, nullable: false),
                     TaskContentId = table.Column<decimal>(type: "numeric(20,0)", nullable: true),
                     DeletedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
@@ -264,6 +331,12 @@ namespace CoreService.Application.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Companies_Name",
+                table: "Companies",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Profiles_CompanyId",
                 table: "Profiles",
                 column: "CompanyId");
@@ -275,9 +348,51 @@ namespace CoreService.Application.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectEntityUserEntity_UsersId",
-                table: "ProjectEntityUserEntity",
-                column: "UsersId");
+                name: "IX_Projects_Name",
+                table: "Projects",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_Level",
+                table: "Roles",
+                column: "Level",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_Name",
+                table: "Roles",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_ShortCode",
+                table: "Roles",
+                column: "ShortCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleScreen_ScreensId",
+                table: "RoleScreen",
+                column: "ScreensId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Screens_Name",
+                table: "Screens",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Screens_OrderNumber",
+                table: "Screens",
+                column: "OrderNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Screens_Value",
+                table: "Screens",
+                column: "Value",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskContentComments_TaskContentId",
@@ -307,9 +422,29 @@ namespace CoreService.Application.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserProject_UsersId",
+                table: "UserProject",
+                column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserScreen_UsersId",
+                table: "UserScreen",
+                column: "UsersId");
         }
 
         /// <inheritdoc />
@@ -319,7 +454,7 @@ namespace CoreService.Application.Migrations
                 name: "Profiles");
 
             migrationBuilder.DropTable(
-                name: "ProjectEntityUserEntity");
+                name: "RoleScreen");
 
             migrationBuilder.DropTable(
                 name: "TaskContentComments");
@@ -331,19 +466,28 @@ namespace CoreService.Application.Migrations
                 name: "TaskFields");
 
             migrationBuilder.DropTable(
-                name: "Companies");
+                name: "UserProject");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "UserScreen");
+
+            migrationBuilder.DropTable(
+                name: "Companies");
 
             migrationBuilder.DropTable(
                 name: "TaskContents");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Screens");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Tasks");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Projects");
