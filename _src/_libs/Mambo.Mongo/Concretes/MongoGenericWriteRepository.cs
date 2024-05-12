@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,33 +16,27 @@ namespace Mambo.Mongo.Concretes
 
         public MongoGenericWriteRepository(MongoDbSettings mongoDbSettings, string collectionName) : base(mongoDbSettings)
         {
-            _collection = _mongoDb.GetCollection<TEntity>(collectionName);
+            _collection = _mongoDb.GetCollection<TEntity>(collectionName, new MongoCollectionSettings() { AssignIdOnInsert = true });
         }
 
-        public async Task<(bool isSuccessful, string? errorMessage)> CreateMultipleDocumentsAsync(IEnumerable<TEntity> documents)
+        public async Task CreateMultipleDocumentsAsync(IEnumerable<TEntity> documents, CancellationToken cancellationToken)
         {
-            try
-            {
-                await _collection.InsertManyAsync(documents);
-                return (true, null);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
+            await _collection.InsertManyAsync(documents, null, cancellationToken);
         }
 
-        public async Task<(bool isSuccessful, string? errorMessage)> CreateSingleDocumentAsync(TEntity document)
+        public async Task CreateSingleDocumentAsync(TEntity document, CancellationToken cancellationToken)
         {
-            try
-            {
-                await _collection.InsertOneAsync(document);
-                return (true, null);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
+            await _collection.InsertOneAsync(document, null, cancellationToken);
+        }
+
+        public async Task DeleteMultipleDocumentsAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken)
+        {
+            await _collection.DeleteManyAsync(condition, null, cancellationToken);
+        }
+
+        public async Task UpdateSingleDocumentsAsync(Expression<Func<TEntity, bool>> condition, UpdateDefinition<TEntity> updatedEntity, CancellationToken cancellationToken)
+        {
+            await _collection.UpdateOneAsync(condition, updatedEntity, null, cancellationToken);
         }
     }
 }

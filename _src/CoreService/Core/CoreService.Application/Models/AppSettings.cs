@@ -1,4 +1,5 @@
 ﻿using Mambo.JWT;
+using Mambo.MassTransit.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace CoreService.Application.Models
             GenerateTokenSettings = new GenerateTokenSettings();
             CorsOptions = new CorsOptions();
             PostgreSqlTestContainerSettings = new PostgreSqlTestContainerSettings();
+            PublisherMassTransitSettings = new PublisherMassTransitSettings();
         }
 
         public string UiAdminUsername { get; set; }
@@ -29,6 +31,7 @@ namespace CoreService.Application.Models
         public ElasticsearchSettings ElasticsearchSettings { get; set; }
         public CorsOptions CorsOptions { get; set; }
         public PostgreSqlTestContainerSettings PostgreSqlTestContainerSettings { get; set; }
+        public PublisherMassTransitSettings PublisherMassTransitSettings { get; set; }
     }
 
     public class ElasticsearchSettings

@@ -11,20 +11,23 @@ using System.Threading.Tasks;
 
 namespace Mambo.Mongo.Concretes
 {
-    public class MongoGenericReadRepository<TEntity>(MongoDbSettings mongoDbSettings, string collectionName) : MongoConnectionProvider(mongoDbSettings), IGenericMongoReadRepository<TEntity> where TEntity : class
+    public class MongoGenericReadRepository<TEntity> : MongoConnectionProvider, IGenericMongoReadRepository<TEntity> where TEntity : class
     {
-        private readonly string _collectionName = collectionName;
+        private readonly IMongoCollection<TEntity> _collection;
 
-        public async Task<IEnumerable<TEntity>> GetAllDocumentsAsync(MongoCollectionSettings? collectionSettings = null)
+        public MongoGenericReadRepository(MongoDbSettings mongoDbSettings, string collectionName) : base(mongoDbSettings)
         {
-            var collectionData = _mongoDb.GetCollection<TEntity>(_collectionName, collectionSettings ?? new MongoCollectionSettings() { });
-            return await (await collectionData.FindAsync(_ => true)).ToListAsync();
+            _collection = _mongoDb.GetCollection<TEntity>(collectionName, new MongoCollectionSettings() { });
         }
 
-        public async Task<IEnumerable<TEntity>> GetDocumentsByConditionAsync(Expression<Func<TEntity, bool>> condition, MongoCollectionSettings? collectionSettings = null)
+        public async Task<IEnumerable<TEntity>> GetAllDocumentsAsync(CancellationToken cancellationToken)
         {
-            var collectionData = _mongoDb.GetCollection<TEntity>(_collectionName, collectionSettings ?? new MongoCollectionSettings() { });
-            return await (await collectionData.FindAsync(condition)).ToListAsync();
+            return await (await _collection.FindAsync(_ => true, options: null, cancellationToken: cancellationToken)).ToListAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetDocumentsByConditionAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken)
+        {
+            return await (await _collection.FindAsync(condition, null, cancellationToken)).ToListAsync(cancellationToken);
         }
     }
 }

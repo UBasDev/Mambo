@@ -10,8 +10,8 @@ namespace Mambo.Mongo.Abstracts
 {
     public interface IGenericMongoReadRepository<TEntity>
     {
-        Task<IEnumerable<TEntity>> GetAllDocumentsAsync(MongoCollectionSettings? collectionSettings = null);
+        Task<IEnumerable<TEntity>> GetAllDocumentsAsync(CancellationToken cancellationToken);
 
-        Task<IEnumerable<TEntity>> GetDocumentsByConditionAsync(Expression<Func<TEntity, bool>> condition, MongoCollectionSettings? collectionSettings = null);
+        Task<IEnumerable<TEntity>> GetDocumentsByConditionAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken);
     }
 }

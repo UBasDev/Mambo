@@ -18,7 +18,7 @@ configuration.Bind(nameof(AppSettings), appSettings);
 builder.Services.AddSingleton(appSettings);
 builder.Services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
 
-builder.Services.AddPresentationRegistrations(appSettings.MongoDbSettings);
+builder.Services.AddPresentationRegistrations(appSettings.MongoDbSettings, appSettings.ConsumerMassTransitSettings);
 
 var host = builder.Build();
 host.Run();

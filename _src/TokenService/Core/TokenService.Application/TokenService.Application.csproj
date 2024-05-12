@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\_libs\Mambo.MassTransit\Mambo.MassTransit.csproj" />
     <ProjectReference Include="..\TokenService.Domain\TokenService.Domain.csproj" />
   </ItemGroup>
 
