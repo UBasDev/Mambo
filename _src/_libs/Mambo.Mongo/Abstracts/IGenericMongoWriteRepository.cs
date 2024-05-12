@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,8 +10,12 @@ namespace Mambo.Mongo.Abstracts
 {
     public interface IGenericMongoWriteRepository<TEntity>
     {
-        Task<(bool isSuccessful, string? errorMessage)> CreateSingleDocumentAsync(TEntity document);
+        Task CreateSingleDocumentAsync(TEntity document, CancellationToken cancellationToken);
 
-        Task<(bool isSuccessful, string? errorMessage)> CreateMultipleDocumentsAsync(IEnumerable<TEntity> documents);
+        Task CreateMultipleDocumentsAsync(IEnumerable<TEntity> documents, CancellationToken cancellationToken);
+
+        Task DeleteMultipleDocumentsAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken);
+
+        Task UpdateSingleDocumentsAsync(Expression<Func<TEntity, bool>> condition, UpdateDefinition<TEntity> updatedEntity, CancellationToken cancellationToken);
     }
 }

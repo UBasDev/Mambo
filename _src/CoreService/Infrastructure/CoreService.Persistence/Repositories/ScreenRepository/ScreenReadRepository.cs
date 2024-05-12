@@ -16,7 +16,7 @@ namespace CoreService.Persistence.Repositories.ScreenRepository
         public async Task<HashSet<string>> GetOnlyScreenNamesAsNoTrackingAsync(CancellationToken cancellationToken)
         {
             var screenNames = new HashSet<string>();
-            await foreach (var item in _dbContext.Screens.AsAsyncEnumerable().WithCancellation(cancellationToken))
+            await foreach (var item in _dbContext.Screens.AsNoTracking().AsAsyncEnumerable().WithCancellation(cancellationToken))
             {
                 screenNames.Add(item.Name);
             }

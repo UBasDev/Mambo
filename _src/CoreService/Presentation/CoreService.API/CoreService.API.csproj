@@ -26,7 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\_libs\Mambo.APM\Mambo.APM.csproj" />
     <ProjectReference Include="..\..\..\_libs\Mambo.Attribute\Mambo.Attribute.csproj" />
-    <ProjectReference Include="..\..\Core\CoreService.Application\CoreService.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CoreService.Persistence\CoreService.Persistence.csproj" />
   </ItemGroup>
 

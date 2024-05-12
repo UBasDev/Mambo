@@ -41,7 +41,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddApplicationRegistrations(appSettings.MamboCoreDbConnectionString);
+builder.Services.AddApplicationRegistrations(appSettings.MamboCoreDbConnectionString, appSettings.PublisherMassTransitSettings);
 builder.Services.AddPresentationRegistrations(appSettings.JwtSettings, appSettings.CorsOptions);
 builder.Services.AddPersistenceRegistrations();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
