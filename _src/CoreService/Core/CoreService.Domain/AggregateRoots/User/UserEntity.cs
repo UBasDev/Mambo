@@ -114,43 +114,5 @@ namespace CoreService.Domain.AggregateRoots.User
             var bytes = hashGenerator.GetBytes(24);
             return Convert.ToBase64String(bytes);
         }
-
-        public string GenerateToken(TimeSpan expireTime, string secretKey, string issuer, string audience)
-        {
-            var tokenDescriptor1 = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(
-                    new[]
-                        {
-                            new Claim("username", Username),
-                            new Claim("email", Email),
-                            new Claim("rolename", Role?.Name ?? string.Empty),
-                            new Claim("rolelevel", Role?.Level.ToString() ?? string.Empty),
-                        }
-                ),
-                Expires = DateTime.UtcNow.Add(expireTime),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-
-                    SecurityAlgorithms.HmacSha512
-                ),
-                Issuer = issuer,
-
-                Audience = audience,
-
-                IssuedAt = DateTime.UtcNow,
-
-                TokenType = JwtRegisteredClaimNames.Typ,
-
-                NotBefore = DateTime.UtcNow
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            return tokenHandler.WriteToken(
-
-                tokenHandler.CreateToken(tokenDescriptor1) //Burada tokenı elde ederiz.
-            );
-        }
     }
 }
