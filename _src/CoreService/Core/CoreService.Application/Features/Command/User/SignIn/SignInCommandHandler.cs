@@ -1,4 +1,5 @@
-﻿using CoreService.Application.Models;
+﻿using CoreService.Application.DTOs;
+using CoreService.Application.Models;
 using CoreService.Application.Repositories;
 using CoreService.Domain.AggregateRoots.User;
 using Mambo.MassTransit.Concretes;
@@ -23,14 +24,14 @@ namespace CoreService.Application.Features.Command.User.SignIn
                     await HandleForAdminUserAsync(request, response, cancellationToken);
                     return response;
                 }
-                var foundUser = await _unitOfWork.UserReadRepository.FindByConditionAsNoTracking(u => u.Email == request.EmailOrUsername || u.Username == request.EmailOrUsername).Include(u => u.Profile).ThenInclude(p => p.Company).Include(u => u.Role).ThenInclude(r => r.Screens).FirstOrDefaultAsync(cancellationToken);
+                var foundUser = await _unitOfWork.UserReadRepository.GetUserWithAllIncludesAsNoTrackingAsync(request.EmailOrUsername, cancellationToken);
                 if (foundUser == null)
                 {
                     LogWarning("Your email or username is wrong", request, HttpStatusCode.BadRequest);
                     response.SetForError("Your email or username is wrong", HttpStatusCode.BadRequest);
                     return response;
                 }
-                else if (foundUser.PasswordHash != UserEntity.ComputeHash(request.Password, foundUser.PasswordSalt))
+                else if (foundUser.PasswordHash != UserEntity.ComputeHash(request.Password, foundUser.PasswordSalt ?? string.Empty))
                 {
                     LogWarning("Your password is wrong", request, HttpStatusCode.BadRequest);
                     response.SetForError("Your password is wrong", HttpStatusCode.BadRequest);
@@ -41,12 +42,11 @@ namespace CoreService.Application.Features.Command.User.SignIn
                 var generatedRefreshToken = foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
                 SetCookiesToResponse(generatedAccessToken, generatedRefreshToken);
 
-                var allScreenNamesOfUser = foundUser.Role?.Screens?.Select(s => s.Name)?.ToHashSet() ?? new HashSet<string>();
                 response.SetPayload(
-                    SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Id, foundUser.Username, foundUser.Email, foundUser.Profile?.Firstname, foundUser.Profile?.Lastname, foundUser.Profile?.Company?.Name, foundUser.Role?.Name ?? string.Empty, allScreenNamesOfUser)
+                    SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Username, foundUser.Email, foundUser.Firstname, foundUser.Lastname, foundUser.CompanyName, foundUser.RoleName, foundUser.RoleLevel, foundUser.Screens)
                     );
 
-                await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, foundUser.Id.ToString(), cancellationToken);
+                await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, foundUser.Id, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -94,14 +94,18 @@ namespace CoreService.Application.Features.Command.User.SignIn
 
         private async Task HandleForAdminUserAsync(SignInCommandRequest request, SignInCommandResponse response, CancellationToken cancellationToken)
         {
-            var adminUser = await _unitOfWork.UserReadRepository.FindByConditionAsNoTracking(u => u.Username == request.EmailOrUsername).Include(u => u.Profile).ThenInclude(p => p.Company).Include(u => u.Role).FirstOrDefaultAsync(cancellationToken);
+            var adminUser = await _unitOfWork.UserReadRepository.GetAdminUserWithAllIncludesAsNoTrackingAsync(request.EmailOrUsername, cancellationToken);
+
             if (adminUser is null)
             {
                 LogWarning("Your admin credentials are wrong", request, HttpStatusCode.BadRequest);
                 response.SetForError("Your admin credentials are wrong", HttpStatusCode.BadRequest);
                 return;
             }
+
             var allScreenNamesOfAdminUser = await _unitOfWork.ScreenReadRepository.GetOnlyScreenNamesAsNoTrackingAsync(cancellationToken);
+
+            adminUser.AddScreensRange(allScreenNamesOfAdminUser);
 
             var generatedAccessToken = adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
             var generatedRefreshToken = adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
@@ -109,9 +113,9 @@ namespace CoreService.Application.Features.Command.User.SignIn
             SetCookiesToResponse(generatedAccessToken, generatedRefreshToken);
 
             response.SetPayload(
-            SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Id, adminUser.Username, adminUser.Email, adminUser.Profile?.Firstname, adminUser.Profile?.Lastname, adminUser.Profile?.Company?.Name, adminUser.Role?.Name ?? string.Empty, allScreenNamesOfAdminUser)
+            SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Username, adminUser.Email, adminUser.Firstname, adminUser.Lastname, adminUser.CompanyName, adminUser.RoleName, adminUser.RoleLevel, allScreenNamesOfAdminUser)
             );
-            await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, adminUser.Id.ToString(), cancellationToken);
+            await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, adminUser.Id, cancellationToken);
         }
 
         private async Task SendTokenWithRabbitMqMessage(string generatedAccessToken, string generatedRefreshToken, string userId, CancellationToken cancellationToken)

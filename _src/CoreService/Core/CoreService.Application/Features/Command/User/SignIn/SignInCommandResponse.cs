@@ -15,37 +15,37 @@ namespace CoreService.Application.Features.Command.User.SignIn
     {
         public SignInCommandResponseModel()
         {
-            Id = Guid.Empty;
             Username = string.Empty;
             Email = string.Empty;
-            Firstname = string.Empty;
-            Lastname = string.Empty;
-            CompanyName = string.Empty;
-            RoleName = string.Empty;
+            Firstname = null;
+            Lastname = null;
+            CompanyName = null;
+            RoleName = null;
+            RoleLevel = null;
             Screens = new HashSet<string>();
         }
 
-        private SignInCommandResponseModel(Guid id, string username, string email, string? firstname, string? lastname, string? companyName, string roleName, ICollection<string> screens)
+        private SignInCommandResponseModel(string username, string email, string? firstname, string? lastname, string? companyName, string? roleName, UInt16? roleLevel, ICollection<string> screens)
         {
-            Id = id;
             Username = username;
             Email = email;
             Firstname = firstname;
             Lastname = lastname;
             CompanyName = companyName;
             RoleName = roleName;
+            RoleLevel = roleLevel;
             Screens = screens;
         }
 
-        public Guid Id { get; private set; }
         public string Username { get; private set; }
         public string Email { get; private set; }
         public string? Firstname { get; private set; }
         public string? Lastname { get; private set; }
         public string? CompanyName { get; private set; }
-        public string RoleName { get; private set; }
+        public string? RoleName { get; private set; }
+        public UInt16? RoleLevel { get; private set; }
         public ICollection<string> Screens { get; set; }
 
-        public static SignInCommandResponseModel CreateNewSignInCommandResponseModel(Guid id, string username, string email, string? firstname, string? lastname, string? companyName, string roleName, HashSet<string> screens) => new SignInCommandResponseModel(id, username, email, firstname, lastname, companyName, roleName, screens);
+        public static SignInCommandResponseModel CreateNewSignInCommandResponseModel(string username, string email, string? firstname, string? lastname, string? companyName, string? roleName, UInt16? roleLevel, ICollection<string> screens) => new SignInCommandResponseModel(username, email, firstname, lastname, companyName, roleName, roleLevel, screens);
     }
 }
