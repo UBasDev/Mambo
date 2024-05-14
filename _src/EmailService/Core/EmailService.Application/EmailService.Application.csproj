@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\_libs\Mambo.Email\Mambo.Email.csproj" />
+    <ProjectReference Include="..\..\..\_libs\Mambo.MassTransit\Mambo.MassTransit.csproj" />
+    <ProjectReference Include="..\..\..\_libs\Mambo.Mongo\Mambo.Mongo.csproj" />
+    <ProjectReference Include="..\EmailService.Domain\EmailService.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

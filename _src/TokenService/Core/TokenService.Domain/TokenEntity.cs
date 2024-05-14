@@ -17,6 +17,8 @@ namespace TokenService.Domain
             AccessTokenExpireDate = 0;
             RefreshToken = string.Empty;
             RefreshTokenExpireDate = 0;
+            CreatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = null;
         }
 
         private TokenEntity(string userId, string accessToken, UInt64 accessTokenExpireDate, string refreshToken, UInt64 refreshTokenExpireDate)
@@ -26,6 +28,8 @@ namespace TokenService.Domain
             AccessTokenExpireDate = accessTokenExpireDate;
             RefreshToken = refreshToken;
             RefreshTokenExpireDate = refreshTokenExpireDate;
+            CreatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = null;
         }
 
         public string UserId { get; private set; }
@@ -33,6 +37,8 @@ namespace TokenService.Domain
         public UInt64 AccessTokenExpireDate { get; private set; }
         public string RefreshToken { get; private set; }
         public UInt64 RefreshTokenExpireDate { get; private set; }
+        public DateTimeOffset CreatedAt { get; private set; }
+        public DateTimeOffset? UpdatedAt { get; private set; }
 
         public static TokenEntity CreateNewTokenEntity(string userId, string accessToken, UInt64 accessTokenExpireDate, string refreshToken, UInt64 refreshTokenExpireDate)
         {

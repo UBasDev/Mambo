@@ -46,7 +46,7 @@ namespace CoreService.Application.Features.Command.User.SignIn
                     SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Username, foundUser.Email, foundUser.Firstname, foundUser.Lastname, foundUser.CompanyName, foundUser.RoleName, foundUser.RoleLevel, foundUser.Screens)
                     );
 
-                await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, foundUser.Id, cancellationToken);
+                await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, foundUser.Id, foundUser.Email, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -115,10 +115,10 @@ namespace CoreService.Application.Features.Command.User.SignIn
             response.SetPayload(
             SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Username, adminUser.Email, adminUser.Firstname, adminUser.Lastname, adminUser.CompanyName, adminUser.RoleName, adminUser.RoleLevel, allScreenNamesOfAdminUser)
             );
-            await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, adminUser.Id, cancellationToken);
+            await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, adminUser.Id, adminUser.Email, cancellationToken);
         }
 
-        private async Task SendTokenWithRabbitMqMessage(string generatedAccessToken, string generatedRefreshToken, string userId, CancellationToken cancellationToken)
+        private async Task SendTokenWithRabbitMqMessage(string generatedAccessToken, string generatedRefreshToken, string userId, string email, CancellationToken cancellationToken)
         {
             await _eventBusProvider._eventBus.Send<SendUserTokenMessageCommand>(new SendUserTokenMessageCommand()
             {
@@ -127,6 +127,7 @@ namespace CoreService.Application.Features.Command.User.SignIn
                 UserId = userId,
                 AccessTokenExpireDate = (UInt64)DateTimeOffset.UtcNow.AddMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime).ToUnixTimeSeconds(),
                 RefreshTokenExpireDate = (UInt64)DateTimeOffset.UtcNow.AddMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime).ToUnixTimeSeconds(),
+                Email = email
             }, cancellationToken);
         }
     }

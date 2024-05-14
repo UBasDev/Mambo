@@ -81,15 +81,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{B4FB0334-11AB-4360-946A-D59909B64EDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService.Application", "_src\EmailService\Core\EmailService.Application\EmailService.Application.csproj", "{9F7AE94F-A8D5-4C23-9D4A-1EA95C7C5872}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService.Application", "_src\EmailService\Core\EmailService.Application\EmailService.Application.csproj", "{9F7AE94F-A8D5-4C23-9D4A-1EA95C7C5872}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService.Domain", "_src\EmailService\Core\EmailService.Domain\EmailService.Domain.csproj", "{1C1209CB-E54A-4307-8600-1A51F199AE6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService.Domain", "_src\EmailService\Core\EmailService.Domain\EmailService.Domain.csproj", "{1C1209CB-E54A-4307-8600-1A51F199AE6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService.Infrastructure", "_src\EmailService\Infrastructure\EmailService.Infrastructure\EmailService.Infrastructure.csproj", "{42589051-9EB0-4987-8B9C-327C2046B0A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService.Infrastructure", "_src\EmailService\Infrastructure\EmailService.Infrastructure\EmailService.Infrastructure.csproj", "{42589051-9EB0-4987-8B9C-327C2046B0A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService.Persistence", "_src\EmailService\Infrastructure\EmailService.Persistence\EmailService.Persistence.csproj", "{8B33F254-3D69-4A3B-BA42-A91AD0D21CC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService.Persistence", "_src\EmailService\Infrastructure\EmailService.Persistence\EmailService.Persistence.csproj", "{8B33F254-3D69-4A3B-BA42-A91AD0D21CC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService.WORKER", "_src\EmailService\Presentation\EmailService.WORKER\EmailService.WORKER.csproj", "{05BC41AB-D218-44D9-A667-E2C4A6313FB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService.WORKER", "_src\EmailService\Presentation\EmailService.WORKER\EmailService.WORKER.csproj", "{05BC41AB-D218-44D9-A667-E2C4A6313FB0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TokenService", "TokenService", "{57D5421B-2212-442A-ADE5-D73EB863CEE5}"
 EndProject
@@ -99,15 +99,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{10E7E986-8372-4A4E-A4C3-D9267BA3AA6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenService.Application", "_src\TokenService\Core\TokenService.Application\TokenService.Application.csproj", "{37BA7920-0CB1-45D6-BE84-D6992C4961DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenService.Application", "_src\TokenService\Core\TokenService.Application\TokenService.Application.csproj", "{37BA7920-0CB1-45D6-BE84-D6992C4961DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenService.Domain", "_src\TokenService\Core\TokenService.Domain\TokenService.Domain.csproj", "{4B5D1FFB-FF4F-41AC-A3D4-ABBDD073E5B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenService.Domain", "_src\TokenService\Core\TokenService.Domain\TokenService.Domain.csproj", "{4B5D1FFB-FF4F-41AC-A3D4-ABBDD073E5B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenService.Infrastructure", "_src\TokenService\Infrastructure\TokenService.Infrastructure\TokenService.Infrastructure.csproj", "{F9B4B586-49A9-4A42-B6FC-365F7A692A59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenService.Infrastructure", "_src\TokenService\Infrastructure\TokenService.Infrastructure\TokenService.Infrastructure.csproj", "{F9B4B586-49A9-4A42-B6FC-365F7A692A59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenService.Persistence", "_src\TokenService\Infrastructure\TokenService.Persistence\TokenService.Persistence.csproj", "{6F05600C-A476-4D2A-91AF-A3A78E7C86F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenService.Persistence", "_src\TokenService\Infrastructure\TokenService.Persistence\TokenService.Persistence.csproj", "{6F05600C-A476-4D2A-91AF-A3A78E7C86F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenService.WORKER", "_src\TokenService\Presentation\TokenService.WORKER\TokenService.WORKER.csproj", "{7AFF6769-08C3-4AD0-964D-A45924017E21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenService.WORKER", "_src\TokenService\Presentation\TokenService.WORKER\TokenService.WORKER.csproj", "{7AFF6769-08C3-4AD0-964D-A45924017E21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.Email", "_src\_libs\Mambo.Email\Mambo.Email.csproj", "{BBB98566-F6EA-41D0-81A6-DF6E3F21C738}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -215,6 +217,10 @@ Global
 		{7AFF6769-08C3-4AD0-964D-A45924017E21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AFF6769-08C3-4AD0-964D-A45924017E21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AFF6769-08C3-4AD0-964D-A45924017E21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBB98566-F6EA-41D0-81A6-DF6E3F21C738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB98566-F6EA-41D0-81A6-DF6E3F21C738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBB98566-F6EA-41D0-81A6-DF6E3F21C738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBB98566-F6EA-41D0-81A6-DF6E3F21C738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -260,6 +266,7 @@ Global
 		{F9B4B586-49A9-4A42-B6FC-365F7A692A59} = {C067021E-9C23-4704-8ED7-C1568D4158A7}
 		{6F05600C-A476-4D2A-91AF-A3A78E7C86F9} = {C067021E-9C23-4704-8ED7-C1568D4158A7}
 		{7AFF6769-08C3-4AD0-964D-A45924017E21} = {10E7E986-8372-4A4E-A4C3-D9267BA3AA6C}
+		{BBB98566-F6EA-41D0-81A6-DF6E3F21C738} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {401B9799-D075-4133-B58C-D9788B81BB40}

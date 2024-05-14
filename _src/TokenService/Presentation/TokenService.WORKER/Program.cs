@@ -1,6 +1,7 @@
 using TokenService.Application.Models;
+using TokenService.Application.Registrations;
+using TokenService.Persistence.Registrations;
 using TokenService.WORKER;
-using TokenService.WORKER.Registrations;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
@@ -18,7 +19,8 @@ configuration.Bind(nameof(AppSettings), appSettings);
 builder.Services.AddSingleton(appSettings);
 builder.Services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
 
-builder.Services.AddPresentationRegistrations(appSettings.MongoDbSettings, appSettings.ConsumerMassTransitSettings);
+builder.Services.AddApplicationRegistrations(appSettings.ConsumerMassTransitSettings);
+builder.Services.AddPersistenceRegistrations(appSettings.MongoDbSettings);
 
 var host = builder.Build();
 host.Run();
