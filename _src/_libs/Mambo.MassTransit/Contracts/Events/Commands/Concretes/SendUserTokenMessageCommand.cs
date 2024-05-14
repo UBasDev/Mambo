@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mambo.MassTransit.Contracts.Events.Commands.Concretes
 {
-    public class SendUserTokenMessageCommand : ISendUserTokenMessageCommand
+    public sealed class SendUserTokenMessageCommand : ISendUserTokenMessageCommand
     {
         public SendUserTokenMessageCommand()
         {
@@ -16,6 +16,7 @@ namespace Mambo.MassTransit.Contracts.Events.Commands.Concretes
             AccessTokenExpireDate = 0;
             RefreshToken = string.Empty;
             RefreshTokenExpireDate = 0;
+            Email = string.Empty;
         }
 
         public string UserId { get; set; }
@@ -23,5 +24,6 @@ namespace Mambo.MassTransit.Contracts.Events.Commands.Concretes
         public UInt64 AccessTokenExpireDate { get; set; }
         public string RefreshToken { get; set; }
         public UInt64 RefreshTokenExpireDate { get; set; }
+        public string Email { get; set; }
     }
 }

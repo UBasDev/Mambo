@@ -1,5 +1,8 @@
-﻿using Mambo.MassTransit.Contracts.Events.Commands.Abstracts;
+﻿using Mambo.MassTransit.Contracts.Events.Abstracts;
+using Mambo.MassTransit.Contracts.Events.Commands.Abstracts;
+using Mambo.MassTransit.Contracts.Events.Concretes;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -8,9 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TokenService.Application.Repositories.Token;
 using TokenService.Domain;
-using static MongoDB.Driver.WriteConcern;
 
-namespace TokenService.WORKER.Consumers
+namespace TokenService.Application.Consumers
 {
     public class SendUserTokenConsumer(ILogger<SendUserTokenConsumer> _logger, ITokenReadRepository _tokenReadRepository, ITokenWriteRepository _tokenWriteRepository) : IConsumer<ISendUserTokenMessageCommand>
     {
@@ -28,12 +30,18 @@ namespace TokenService.WORKER.Consumers
                 }
                 else if (userTokens.Count == 1) //If user already has just one token in db
                 {
-                    await _tokenWriteRepository.UpdateSingleDocumentsAsync(t => t.Id == userTokens[0].Id, Builders<TokenEntity>.Update.Set(t => t.AccessToken, messageFromQueue.AccessToken).Set(t => t.AccessTokenExpireDate, messageFromQueue.AccessTokenExpireDate).Set(t => t.RefreshToken, messageFromQueue.RefreshToken).Set(t => t.RefreshTokenExpireDate, messageFromQueue.RefreshTokenExpireDate), context.CancellationToken);
+                    await _tokenWriteRepository.UpdateSingleDocumentsAsync(t => t.Id == userTokens[0].Id, Builders<TokenEntity>.Update.Set(t => t.AccessToken, messageFromQueue.AccessToken).Set(t => t.AccessTokenExpireDate, messageFromQueue.AccessTokenExpireDate).Set(t => t.RefreshToken, messageFromQueue.RefreshToken).Set(t => t.RefreshTokenExpireDate, messageFromQueue.RefreshTokenExpireDate).Set(t => t.UpdatedAt, DateTimeOffset.UtcNow), context.CancellationToken);
                 }
                 else //If there is no token exists
                 {
                     await CreateSingleTokenAsync(messageFromQueue, context.CancellationToken);
                 }
+
+                await context.Publish<ISendEmailToUserEvent>(new SendEmailToUserEvent()
+                {
+                    Email = messageFromQueue.Email,
+                    UserId = messageFromQueue.UserId
+                }, context.CancellationToken);
             }
             catch (Exception ex)
             {

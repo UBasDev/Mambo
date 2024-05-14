@@ -13,5 +13,6 @@ namespace Mambo.MassTransit.Contracts.Events.Commands.Abstracts
         public UInt64 AccessTokenExpireDate { get; }
         public string RefreshToken { get; }
         public UInt64 RefreshTokenExpireDate { get; }
+        public string Email { get; }
     }
 }

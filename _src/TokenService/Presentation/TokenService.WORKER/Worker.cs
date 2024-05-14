@@ -15,7 +15,7 @@ namespace TokenService.WORKER
                 }
                 await Task.Delay(1000, stoppingToken);
             }*/
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("Token Worker running at: {time}", DateTimeOffset.Now);
         }
     }
 }
