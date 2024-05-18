@@ -12,10 +12,12 @@ namespace TokenService.Application.Models
     {
         public AppSettings()
         {
+            IsEmailSendActive = false;
             MongoDbSettings = new MongoDbSettings();
             ConsumerMassTransitSettings = new ConsumerMassTransitSettings();
         }
 
+        public bool IsEmailSendActive { get; set; }
         public MongoDbSettings MongoDbSettings { get; set; }
         public ConsumerMassTransitSettings ConsumerMassTransitSettings { get; set; }
     }

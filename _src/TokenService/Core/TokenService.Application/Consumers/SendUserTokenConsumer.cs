@@ -5,16 +5,16 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TokenService.Application.Models;
 using TokenService.Application.Repositories.Token;
 using TokenService.Domain;
 
 namespace TokenService.Application.Consumers
 {
-    public class SendUserTokenConsumer(ILogger<SendUserTokenConsumer> _logger, ITokenReadRepository _tokenReadRepository, ITokenWriteRepository _tokenWriteRepository) : IConsumer<ISendUserTokenMessageCommand>
+    public class SendUserTokenConsumer(ILogger<SendUserTokenConsumer> _logger, ITokenReadRepository _tokenReadRepository, ITokenWriteRepository _tokenWriteRepository, AppSettings _appSettings) : IConsumer<ISendUserTokenMessageCommand>
     {
         public async Task Consume(ConsumeContext<ISendUserTokenMessageCommand> context)
         {
@@ -36,12 +36,14 @@ namespace TokenService.Application.Consumers
                 {
                     await CreateSingleTokenAsync(messageFromQueue, context.CancellationToken);
                 }
-
-                await context.Publish<ISendEmailToUserEvent>(new SendEmailToUserEvent()
+                if (_appSettings.IsEmailSendActive)
                 {
-                    Email = messageFromQueue.Email,
-                    UserId = messageFromQueue.UserId
-                }, context.CancellationToken);
+                    await context.Publish<ISendEmailToUserEvent>(new SendEmailToUserEvent()
+                    {
+                        Email = messageFromQueue.Email,
+                        UserId = messageFromQueue.UserId
+                    }, context.CancellationToken);
+                }
             }
             catch (Exception ex)
             {

@@ -17,7 +17,7 @@ namespace Mambo.Email.Concretes
             _smtpClient = new SmtpClient();
         }
 
-        public abstract Task SendEmailAsync(NewMail mail, CancellationToken cancellationToken);
+        public abstract Task SendEmailAsync(CustomMail mail, CancellationToken cancellationToken);
 
         private bool _disposed = false;
 

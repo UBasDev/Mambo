@@ -13,7 +13,7 @@ namespace Mambo.Email.Concretes
 {
     public sealed class EmailProvider(ILogger<EmailProvider> _logger, EmailSettings _emailSettings) : BaseEmailProvider
     {
-        public override async Task SendEmailAsync(NewMail mail, CancellationToken cancellationToken)
+        public override async Task SendEmailAsync(CustomMail mail, CancellationToken cancellationToken)
         {
             try
             {
