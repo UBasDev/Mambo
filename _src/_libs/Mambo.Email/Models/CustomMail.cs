@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mambo.Email.Models
 {
-    public struct NewMail
+    public struct CustomMail
     {
         public ICollection<MailboxAddress> To { get; set; }
         public ICollection<MailboxAddress> Cc { get; set; }
@@ -16,7 +16,7 @@ namespace Mambo.Email.Models
         public string Content { get; set; }
         public ICollection<MailAttachment> Attachments { get; set; }
 
-        public NewMail(ICollection<string> to, string subject, string content, ICollection<MailAttachment> _attachments = null, ICollection<string> cc = null, ICollection<string> bcc = null)
+        public CustomMail(ICollection<string> to, string subject, string content, ICollection<MailAttachment> _attachments = null, ICollection<string> cc = null, ICollection<string> bcc = null)
         {
             To = new HashSet<MailboxAddress>();
             Cc = new HashSet<MailboxAddress>();
