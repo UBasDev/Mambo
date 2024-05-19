@@ -3,6 +3,7 @@ import { CommonLayoutComponent } from './Layouts/CommonLayout/CommonLayout.compo
 import { HomeComponent } from './Pages/Home/Home.component';
 import { Authorized1Component } from './Pages/Authorized1/Authorized1.component';
 import { AuthGuard } from './Guards/Auth.guard';
+import { Unauthorized1Component } from './Pages/Unauthorized1/Unauthorized1.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,10 @@ export const routes: Routes = [
         path: 'authorized1',
         component: Authorized1Component,
         canActivate: [AuthGuard],
+      },
+      {
+        path: 'unauthorized1',
+        component: Unauthorized1Component,
       },
     ],
   },

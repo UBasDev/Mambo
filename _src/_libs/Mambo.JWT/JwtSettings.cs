@@ -22,6 +22,7 @@ namespace Mambo.JWT
         public string[] ValidTypes { get; set; }
         public string[] ValidAlgorithms { get; set; }
         public bool RequireHttpsMetadata { get; set; }
+        public bool RequireExpirationTime { get; set; }
         public bool MapInboundClaims { get; set; }
         public bool SaveToken { get; set; }
         public string CookieKey { get; set; }

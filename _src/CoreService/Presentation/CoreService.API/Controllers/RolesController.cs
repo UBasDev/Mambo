@@ -2,6 +2,7 @@
 using CoreService.Application.Features.Command.Role.CreateSingleRole;
 using CoreService.Application.Features.Queries.Role.GetAllRoles;
 using CoreService.Application.Features.Queries.Role.GetSingleRoleById;
+using Mambo.Attribute;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using System.Threading;
 namespace CoreService.API.Controllers
 {
     [Route("api/v1/[controller]")]
+    [CustomAuthorize("admin", "common")]
     public class RolesController(IMediator mediator) : BaseController(mediator)
     {
         [HttpPost("create-single-role")]

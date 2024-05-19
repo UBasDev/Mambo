@@ -16,13 +16,9 @@ namespace CoreService.Application.DTOs
         public AdminSignInDto()
         {
             Id = string.Empty;
-            Username = string.Empty;
-            Email = string.Empty;
             Firstname = null;
             Lastname = null;
             CompanyName = null;
-            RoleName = null;
-            RoleLevel = null;
             Screens = new HashSet<string>();
         }
 

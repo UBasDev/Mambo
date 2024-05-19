@@ -21,6 +21,7 @@ namespace CoreService.Application.Models
             CorsOptions = new CorsOptions();
             PostgreSqlTestContainerSettings = new PostgreSqlTestContainerSettings();
             PublisherMassTransitSettings = new PublisherMassTransitSettings();
+            CookieSettings = new CookieSettings();
         }
 
         public string UiAdminUsername { get; set; }
@@ -32,6 +33,7 @@ namespace CoreService.Application.Models
         public CorsOptions CorsOptions { get; set; }
         public PostgreSqlTestContainerSettings PostgreSqlTestContainerSettings { get; set; }
         public PublisherMassTransitSettings PublisherMassTransitSettings { get; set; }
+        public CookieSettings CookieSettings { get; set; }
     }
 
     public class ElasticsearchSettings

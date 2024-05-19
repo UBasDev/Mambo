@@ -32,5 +32,10 @@ namespace CoreService.Persistence.Repositories.UserRepository
                 .Select(u => AdminSignInDto.CreateSignInDto(u.Id.ToString(), u.Username, u.Email, (u.Profile == null ? null : u.Profile.Firstname), (u.Profile == null ? null : u.Profile.Lastname), (u.Profile == null || u.Profile.Company == null ? null : u.Profile.Company.Name), (u.Role == null ? null : u.Role.Name), (u.Role == null ? null : u.Role.Level)))
                 .FirstOrDefaultAsync(cancellationToken);
         }
+
+        public async Task<RefreshMyTokenDto?> GetOnlyTokenFieldsAsNoTrackingAsync(string username, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Users.Where(u => u.Username == username).Select(u => RefreshMyTokenDto.CreateRefreshMyToken(u.Username, u.Email, (u.Role == null ? null : u.Role.Name), (u.Role == null ? null : u.Role.Level))).FirstOrDefaultAsync(cancellationToken);
+        }
     }
 }
