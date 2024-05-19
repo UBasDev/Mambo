@@ -14,5 +14,7 @@ namespace CoreService.Application.Repositories.UserRepository
         Task<UserSignInDto?> GetUserWithAllIncludesAsNoTrackingAsync(string username, CancellationToken cancellationToken);
 
         Task<AdminSignInDto?> GetAdminUserWithAllIncludesAsNoTrackingAsync(string username, CancellationToken cancellationToken);
+
+        Task<RefreshMyTokenDto?> GetOnlyTokenFieldsAsNoTrackingAsync(string username, CancellationToken cancellationToken);
     }
 }

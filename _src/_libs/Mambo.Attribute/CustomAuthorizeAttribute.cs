@@ -18,15 +18,22 @@ namespace Mambo.Attribute
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            var roleClaimOfUser = context.HttpContext.User.Claims.FirstOrDefault(f => f.Type == "roleClaim1")?.Value;
-            if (roleClaimOfUser == null)
+            try
+            {
+                var roleClaimOfUser = context.HttpContext.User.Claims.FirstOrDefault(f => f.Type == "rolename")?.Value;
+                if (roleClaimOfUser == null)
+                {
+                    context.Result = new UnauthorizedResult();
+                    return;
+                }
+                if (RequiredRoles.Count > 0 && !RequiredRoles.Contains(roleClaimOfUser))
+                {
+                    context.Result = new ForbidResult();
+                }
+            }
+            catch (Exception ex)
             {
                 context.Result = new UnauthorizedResult();
-                return;
-            }
-            if (RequiredRoles.Count > 0 && !RequiredRoles.Contains(roleClaimOfUser))
-            {
-                context.Result = new ForbidResult();
             }
         }
     }

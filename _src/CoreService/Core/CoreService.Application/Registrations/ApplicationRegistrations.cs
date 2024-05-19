@@ -1,4 +1,5 @@
 ﻿using CoreService.Application.Contexts;
+using Mambo.Helper;
 using Mambo.MassTransit.Concretes;
 using Mambo.MassTransit.Models;
 using MediatR.NotificationPublishers;
@@ -39,6 +40,12 @@ namespace CoreService.Application.Registrations
             });
 
             #endregion MassTransit
+
+            #region Helpers
+
+            services.AddScoped<Helpers>();
+
+            #endregion Helpers
         }
     }
 }

@@ -34,7 +34,8 @@ namespace Mambo.JWT
                 RequireSignedTokens = jwtSettings.RequireSignedTokens,
                 LogValidationExceptions = jwtSettings.LogValidationExceptions,
                 ValidTypes = jwtSettings.ValidTypes,
-                ValidAlgorithms = jwtSettings.ValidAlgorithms
+                ValidAlgorithms = jwtSettings.ValidAlgorithms,
+                RequireExpirationTime = jwtSettings.RequireExpirationTime
             };
 
             services.AddAuthentication(authOpt =>

@@ -1,18 +1,28 @@
-export default class UserModel {
+export interface IUserModel {
+  username: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  roleName: string;
+  roleLevel: number;
+  screens: ReadonlyArray<string>;
+}
+
+export default class UserModel implements IUserModel {
   constructor() {
     this.username = '';
     this.email = '';
-    this.roleName = '';
     this.firstname = '';
     this.lastname = '';
-    this.age = 0;
-    this.birthDate = 0;
+    this.roleName = '';
+    this.roleLevel = 0;
+    this.screens = [];
   }
   username: string;
   email: string;
-  roleName: string;
   firstname: string;
   lastname: string;
-  age: number;
-  birthDate: number;
+  roleName: string;
+  roleLevel: number;
+  screens: ReadonlyArray<string>;
 }

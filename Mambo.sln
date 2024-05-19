@@ -111,7 +111,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenService.WORKER", "_src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.Email", "_src\_libs\Mambo.Email\Mambo.Email.csproj", "{BBB98566-F6EA-41D0-81A6-DF6E3F21C738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.Enum", "_src\_libs\Mambo.Enum\Mambo.Enum.csproj", "{A8E0D44F-B7C4-4FDA-91F7-C3A4CAA13DB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mambo.Enum", "_src\_libs\Mambo.Enum\Mambo.Enum.csproj", "{A8E0D44F-B7C4-4FDA-91F7-C3A4CAA13DB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mambo.Helper", "_src\_libs\Mambo.Helper\Mambo.Helper.csproj", "{F6497C00-7489-4E49-94AB-DE3C085C6542}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,6 +229,10 @@ Global
 		{A8E0D44F-B7C4-4FDA-91F7-C3A4CAA13DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8E0D44F-B7C4-4FDA-91F7-C3A4CAA13DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8E0D44F-B7C4-4FDA-91F7-C3A4CAA13DB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6497C00-7489-4E49-94AB-DE3C085C6542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6497C00-7489-4E49-94AB-DE3C085C6542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6497C00-7489-4E49-94AB-DE3C085C6542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6497C00-7489-4E49-94AB-DE3C085C6542}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -274,6 +280,7 @@ Global
 		{7AFF6769-08C3-4AD0-964D-A45924017E21} = {10E7E986-8372-4A4E-A4C3-D9267BA3AA6C}
 		{BBB98566-F6EA-41D0-81A6-DF6E3F21C738} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
 		{A8E0D44F-B7C4-4FDA-91F7-C3A4CAA13DB4} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
+		{F6497C00-7489-4E49-94AB-DE3C085C6542} = {6E00C038-6D5F-4877-AB9A-E41BDB5CD686}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {401B9799-D075-4133-B58C-D9788B81BB40}

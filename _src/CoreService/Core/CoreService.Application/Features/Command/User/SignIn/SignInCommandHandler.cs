@@ -2,6 +2,7 @@
 using CoreService.Application.Models;
 using CoreService.Application.Repositories;
 using CoreService.Domain.AggregateRoots.User;
+using Mambo.Helper;
 using Mambo.MassTransit.Concretes;
 using Mambo.MassTransit.Contracts.Events.Commands.Concretes;
 using MediatR;
@@ -12,7 +13,7 @@ using System.Net;
 
 namespace CoreService.Application.Features.Command.User.SignIn
 {
-    internal class SignInCommandHandler(ILogger<SignInCommandHandler> logger, IUnitOfWork _unitOfWork, IHttpContextAccessor _httpContextAccessor, AppSettings _appSettings, PublisherEventBusProvider _eventBusProvider) : BaseCqrsAndDomainEventHandler<SignInCommandHandler>(logger), IRequestHandler<SignInCommandRequest, SignInCommandResponse>
+    internal class SignInCommandHandler(ILogger<SignInCommandHandler> logger, IUnitOfWork _unitOfWork, IHttpContextAccessor _httpContextAccessor, AppSettings _appSettings, PublisherEventBusProvider _eventBusProvider, Helpers _helpers) : BaseCqrsAndDomainEventHandler<SignInCommandHandler>(logger), IRequestHandler<SignInCommandRequest, SignInCommandResponse>
     {
         public async Task<SignInCommandResponse> Handle(SignInCommandRequest request, CancellationToken cancellationToken)
         {
@@ -40,7 +41,8 @@ namespace CoreService.Application.Features.Command.User.SignIn
 
                 var generatedAccessToken = foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
                 var generatedRefreshToken = foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
-                SetCookiesToResponse(generatedAccessToken, generatedRefreshToken);
+
+                _helpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
 
                 response.SetPayload(
                     SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Username, foundUser.Email, foundUser.Firstname, foundUser.Lastname, foundUser.CompanyName, foundUser.RoleName, foundUser.RoleLevel, foundUser.Screens)
@@ -54,42 +56,6 @@ namespace CoreService.Application.Features.Command.User.SignIn
                 response.SetForError("Unexpected error happened while signing in", HttpStatusCode.InternalServerError);
             }
             return response;
-        }
-
-        private void SetCookiesToResponse(string accessToken, string refreshToken)
-        {
-            _httpContextAccessor?.HttpContext?.Response.Cookies.Append(
-                    key: "mambo-access-token",
-
-                    value: accessToken,
-
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Secure = false,
-                        IsEssential = true,
-                        SameSite = SameSiteMode.Strict,
-                        Domain = "localhost",
-                        MaxAge = TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime),
-                        Path = "/"
-                    }
-                );
-            _httpContextAccessor?.HttpContext?.Response.Cookies.Append(
-                key: "mambo-refresh-token",
-
-                value: refreshToken,
-
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = false,
-                    IsEssential = true,
-                    SameSite = SameSiteMode.Strict,
-                    Domain = "localhost",
-                    MaxAge = TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime),
-                    Path = "/"
-                }
-            );
         }
 
         private async Task HandleForAdminUserAsync(SignInCommandRequest request, SignInCommandResponse response, CancellationToken cancellationToken)
@@ -110,7 +76,7 @@ namespace CoreService.Application.Features.Command.User.SignIn
             var generatedAccessToken = adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
             var generatedRefreshToken = adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
 
-            SetCookiesToResponse(generatedAccessToken, generatedRefreshToken);
+            _helpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
 
             response.SetPayload(
             SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Username, adminUser.Email, adminUser.Firstname, adminUser.Lastname, adminUser.CompanyName, adminUser.RoleName, adminUser.RoleLevel, allScreenNamesOfAdminUser)

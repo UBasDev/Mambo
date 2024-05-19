@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\_libs\Mambo.Helper\Mambo.Helper.csproj" />
     <ProjectReference Include="..\..\..\_libs\Mambo.JWT\Mambo.JWT.csproj" />
     <ProjectReference Include="..\..\..\_libs\Mambo.MassTransit\Mambo.MassTransit.csproj" />
     <ProjectReference Include="..\..\..\_libs\Mambo.Response\Mambo.Response.csproj" />
