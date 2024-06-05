@@ -1,6 +1,3 @@
-using TokenService.Application.Repositories.Token;
-using TokenService.Domain;
-
 namespace TokenService.WORKER
 {
     public class Worker(ILogger<Worker> _logger) : BackgroundService

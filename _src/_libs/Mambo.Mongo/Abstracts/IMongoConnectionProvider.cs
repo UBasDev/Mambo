@@ -9,6 +9,6 @@ namespace Mambo.Mongo.Abstracts
 {
     public interface IMongoConnectionProvider
     {
-        public IMongoDatabase _mongoDb { get; }
+        public IMongoDatabase MongoDb { get; }
     }
 }

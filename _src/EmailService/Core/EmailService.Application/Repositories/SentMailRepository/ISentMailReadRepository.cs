@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmailService.Application.Repositories.SentMail
+namespace EmailService.Application.Repositories.SentMailRepository
 {
-    public interface ISentMailWriteRepository : IGenericMongoWriteRepository<SentMailEntity>
+    public interface ISentMailReadRepository : IMongoGenericReadRepository<SentMailEntity>
     {
     }
 }

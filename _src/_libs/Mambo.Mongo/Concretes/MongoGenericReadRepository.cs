@@ -1,8 +1,10 @@
 ﻿using Amazon.Auth.AccessControlPolicy;
 using Mambo.Mongo.Abstracts;
 using Mambo.Mongo.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,23 +13,24 @@ using System.Threading.Tasks;
 
 namespace Mambo.Mongo.Concretes
 {
-    public class MongoGenericReadRepository<TEntity> : MongoConnectionProvider, IGenericMongoReadRepository<TEntity> where TEntity : class
+    public abstract class MongoGenericReadRepository<TEntity>(MongoDbContext mongoDbContext, string collectionName) : IMongoGenericReadRepository<TEntity> where TEntity : class
     {
-        private readonly IMongoCollection<TEntity> _collection;
+        private readonly IMongoCollection<TEntity> _collection = mongoDbContext.GetCollectionByName<TEntity>(collectionName);
 
-        public MongoGenericReadRepository(MongoDbSettings mongoDbSettings, string collectionName) : base(mongoDbSettings)
-        {
-            _collection = _mongoDb.GetCollection<TEntity>(collectionName, new MongoCollectionSettings() { });
-        }
-
-        public async Task<IEnumerable<TEntity>> GetAllDocumentsAsync(CancellationToken cancellationToken)
+        public async Task<List<TEntity>> GetAllDocumentsAsync(CancellationToken cancellationToken)
         {
             return await (await _collection.FindAsync(_ => true, options: null, cancellationToken: cancellationToken)).ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<TEntity>> GetDocumentsByConditionAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken)
+        public async Task<List<TEntity>> GetDocumentsByConditionAsync(Expression<Func<TEntity, bool>> condition, CancellationToken cancellationToken)
         {
             return await (await _collection.FindAsync(condition, null, cancellationToken)).ToListAsync(cancellationToken);
+        }
+
+        public async Task<TEntity> GetByIdAsync(string id, CancellationToken cancellationToken)
+        {
+            var result1 = await _collection.FindAsync(Builders<TEntity>.Filter.Eq("_id", new ObjectId(id)), cancellationToken: cancellationToken);
+            return await result1.FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

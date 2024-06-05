@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mambo.Mongo.Abstracts
 {
-    public interface IGenericMongoWriteRepository<TEntity>
+    public interface IMongoGenericWriteRepository<TEntity>
     {
         Task CreateSingleDocumentAsync(TEntity document, CancellationToken cancellationToken);
 

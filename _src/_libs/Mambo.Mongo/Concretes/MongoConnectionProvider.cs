@@ -11,7 +11,7 @@ namespace Mambo.Mongo.Concretes
 {
     public abstract class MongoConnectionProvider
     {
-        protected IMongoDatabase _mongoDb { get; private set; }
+        protected IMongoDatabase MongoDb { get; private set; }
 
         protected MongoConnectionProvider(MongoDbSettings mongoDbSettings)
         {
@@ -38,7 +38,7 @@ namespace Mambo.Mongo.Concretes
                 }
             };
             var client = new MongoClient(mongoClientSettings);
-            _mongoDb = client.GetDatabase(mongoDbSettings.DatabaseName);
+            MongoDb = client.GetDatabase(mongoDbSettings.DatabaseName);
         }
     }
 }
