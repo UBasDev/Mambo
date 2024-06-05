@@ -1,5 +1,6 @@
-﻿using EmailService.Application.Repositories.SentMail;
-using EmailService.Persistence.Repositories.SentMail;
+﻿using EmailService.Application.Repositories.SentMailRepository;
+using EmailService.Persistence.Repositories.SentMailRepository;
+using Mambo.Mongo.Concretes;
 using Mambo.Mongo.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,6 +18,7 @@ namespace EmailService.Persistence.Registrations
             #region MongoDb
 
             services.AddSingleton(mongoDbSettings);
+            services.AddScoped<MongoDbContext>();
             services.AddScoped<ISentMailReadRepository, SentMailReadRepository>();
             services.AddScoped<ISentMailWriteRepository, SentMailWriteRepository>();
 

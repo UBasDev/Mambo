@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TokenService.Application.Models;
-using TokenService.Application.Repositories.Token;
+using TokenService.Application.Repositories.TokenRepository;
 using TokenService.Domain;
 
 namespace TokenService.Application.Consumers
@@ -21,7 +21,7 @@ namespace TokenService.Application.Consumers
             var messageFromQueue = context.Message;
             try
             {
-                var userTokens = (await _tokenReadRepository.GetDocumentsByConditionAsync(t => t.UserId == messageFromQueue.UserId, context.CancellationToken)).ToList();
+                var userTokens = await _tokenReadRepository.GetDocumentsByConditionAsync(t => t.UserId == messageFromQueue.UserId, context.CancellationToken);
                 if (userTokens.Count > 1) //If there are many tokens which belong to user in db
                 {
                     await _tokenWriteRepository.DeleteMultipleDocumentsAsync(t => userTokens.Select(ut => ut.Id).ToList().Contains(t.Id), context.CancellationToken);

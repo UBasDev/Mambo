@@ -10,14 +10,9 @@ using System.Threading.Tasks;
 
 namespace Mambo.Mongo.Concretes
 {
-    public class MongoGenericWriteRepository<TEntity> : MongoConnectionProvider, IGenericMongoWriteRepository<TEntity> where TEntity : class
+    public abstract class MongoGenericWriteRepository<TEntity>(MongoDbContext mongoDbContext, string collectionName) : IMongoGenericWriteRepository<TEntity> where TEntity : class
     {
-        private readonly IMongoCollection<TEntity> _collection;
-
-        public MongoGenericWriteRepository(MongoDbSettings mongoDbSettings, string collectionName) : base(mongoDbSettings)
-        {
-            _collection = _mongoDb.GetCollection<TEntity>(collectionName, new MongoCollectionSettings() { AssignIdOnInsert = true });
-        }
+        private readonly IMongoCollection<TEntity> _collection = mongoDbContext.GetCollectionByName<TEntity>(collectionName);
 
         public async Task CreateMultipleDocumentsAsync(IEnumerable<TEntity> documents, CancellationToken cancellationToken)
         {

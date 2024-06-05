@@ -1,11 +1,12 @@
-﻿using Mambo.Mongo.Models;
+﻿using Mambo.Mongo.Concretes;
+using Mambo.Mongo.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TokenService.Application.Repositories.Token;
-using TokenService.Persistence.Repositories.Token;
+using TokenService.Application.Repositories.TokenRepository;
+using TokenService.Persistence.Repositories.TokenRepository;
 
 namespace TokenService.Persistence.Registrations
 {
@@ -16,6 +17,7 @@ namespace TokenService.Persistence.Registrations
             #region MongoDb
 
             services.AddSingleton(mongoDbSettings);
+            services.AddScoped<MongoDbContext>();
             services.AddScoped<ITokenReadRepository, TokenReadRepository>();
             services.AddScoped<ITokenWriteRepository, TokenWriteRepository>();
 

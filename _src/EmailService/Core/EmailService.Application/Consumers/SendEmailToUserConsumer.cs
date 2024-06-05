@@ -1,4 +1,4 @@
-﻿using EmailService.Application.Repositories.SentMail;
+﻿using EmailService.Application.Repositories.SentMailRepository;
 using EmailService.Domain;
 using Mambo.Email.Concretes;
 using Mambo.Email.Models;
