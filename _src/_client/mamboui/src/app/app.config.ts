@@ -4,11 +4,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { GlobalUserReducer } from './StateStore/User/UserReducers';
-import {
-  HTTP_INTERCEPTORS,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './Interceptors/Auth.interceptor';
 
 export const appConfig: ApplicationConfig = {

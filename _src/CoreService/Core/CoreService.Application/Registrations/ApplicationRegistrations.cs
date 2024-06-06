@@ -1,4 +1,5 @@
 ﻿using CoreService.Application.Contexts;
+using CoreService.Application.Helpers;
 using Mambo.Helper;
 using Mambo.MassTransit.Concretes;
 using Mambo.MassTransit.Models;
@@ -43,7 +44,8 @@ namespace CoreService.Application.Registrations
 
             #region Helpers
 
-            services.AddScoped<Helpers>();
+            services.AddScoped<GlobalHelpers>();
+            services.AddScoped<LocalHelpers>();
 
             #endregion Helpers
         }

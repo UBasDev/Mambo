@@ -35,7 +35,8 @@ namespace CoreService.Persistence.Repositories.UserRepository
 
         public async Task<RefreshMyTokenDto?> GetOnlyTokenFieldsAsNoTrackingAsync(string username, CancellationToken cancellationToken)
         {
-            return await _dbContext.Users.Where(u => u.Username == username).Select(u => RefreshMyTokenDto.CreateRefreshMyToken(u.Username, u.Email, (u.Role == null ? null : u.Role.Name), (u.Role == null ? null : u.Role.Level))).FirstOrDefaultAsync(cancellationToken);
+            return await _dbContext.Users.AsNoTracking().Where(u => u.Username == username).Include(u => u.Profile).ThenInclude(p => p.Company)
+                .Include(u => u.Role).Select(u => RefreshMyTokenDto.CreateRefreshMyToken(u.Id, (u.Profile == null ? null : u.Profile.Firstname), (u.Profile == null ? null : u.Profile.Lastname), (u.Profile == null || u.Profile.Company == null ? null : u.Profile.Company.Name), u.Screens.Select(s => s.Name).ToHashSet(), u.Username, u.Email, (u.Role == null ? null : u.Role.Name), (u.Role == null ? null : u.Role.Level))).FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

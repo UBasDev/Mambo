@@ -1,4 +1,5 @@
 ﻿using CoreService.Application.DTOs;
+using CoreService.Application.Helpers;
 using CoreService.Application.Models;
 using CoreService.Application.Repositories;
 using CoreService.Domain.AggregateRoots.User;
@@ -13,7 +14,7 @@ using System.Net;
 
 namespace CoreService.Application.Features.Command.User.SignIn
 {
-    internal class SignInCommandHandler(ILogger<SignInCommandHandler> logger, IUnitOfWork _unitOfWork, IHttpContextAccessor _httpContextAccessor, AppSettings _appSettings, PublisherEventBusProvider _eventBusProvider, Helpers _helpers) : BaseCqrsAndDomainEventHandler<SignInCommandHandler>(logger), IRequestHandler<SignInCommandRequest, SignInCommandResponse>
+    internal class SignInCommandHandler(ILogger<SignInCommandHandler> logger, IUnitOfWork _unitOfWork, IHttpContextAccessor _httpContextAccessor, AppSettings _appSettings, PublisherEventBusProvider _eventBusProvider, GlobalHelpers _globalHelpers, LocalHelpers _localHelpers) : BaseCqrsAndDomainEventHandler<SignInCommandHandler>(logger), IRequestHandler<SignInCommandRequest, SignInCommandResponse>
     {
         public async Task<SignInCommandResponse> Handle(SignInCommandRequest request, CancellationToken cancellationToken)
         {
@@ -42,13 +43,13 @@ namespace CoreService.Application.Features.Command.User.SignIn
                 var generatedAccessToken = foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
                 var generatedRefreshToken = foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
 
-                _helpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
+                _globalHelpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
 
                 response.SetPayload(
                     SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Username, foundUser.Email, foundUser.Firstname, foundUser.Lastname, foundUser.CompanyName, foundUser.RoleName, foundUser.RoleLevel, foundUser.Screens)
                     );
 
-                await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, foundUser.Id, foundUser.Email, cancellationToken);
+                await _localHelpers.SendTokenWithRabbitMqMessage(generatedAccessToken, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime, generatedRefreshToken, foundUser.Id, foundUser.Email, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -76,25 +77,13 @@ namespace CoreService.Application.Features.Command.User.SignIn
             var generatedAccessToken = adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
             var generatedRefreshToken = adminUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
 
-            _helpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
+            _globalHelpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
 
             response.SetPayload(
             SignInCommandResponseModel.CreateNewSignInCommandResponseModel(adminUser.Username, adminUser.Email, adminUser.Firstname, adminUser.Lastname, adminUser.CompanyName, adminUser.RoleName, adminUser.RoleLevel, allScreenNamesOfAdminUser)
             );
-            await SendTokenWithRabbitMqMessage(generatedAccessToken, generatedRefreshToken, adminUser.Id, adminUser.Email, cancellationToken);
-        }
 
-        private async Task SendTokenWithRabbitMqMessage(string generatedAccessToken, string generatedRefreshToken, string userId, string email, CancellationToken cancellationToken)
-        {
-            await _eventBusProvider._eventBus.Send<SendUserTokenMessageCommand>(new SendUserTokenMessageCommand()
-            {
-                AccessToken = generatedAccessToken,
-                RefreshToken = generatedRefreshToken,
-                UserId = userId,
-                AccessTokenExpireDate = (UInt64)DateTimeOffset.UtcNow.AddMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime).ToUnixTimeSeconds(),
-                RefreshTokenExpireDate = (UInt64)DateTimeOffset.UtcNow.AddMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime).ToUnixTimeSeconds(),
-                Email = email
-            }, cancellationToken);
+            await _localHelpers.SendTokenWithRabbitMqMessage(generatedAccessToken, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime, generatedRefreshToken, adminUser.Id, adminUser.Email, cancellationToken);
         }
     }
 }

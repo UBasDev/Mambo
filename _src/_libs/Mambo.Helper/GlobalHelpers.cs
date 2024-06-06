@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mambo.Helper
 {
-    public sealed class Helpers(IHttpContextAccessor _httpContextAccessor)
+    public sealed class GlobalHelpers(IHttpContextAccessor _httpContextAccessor)
     {
         public void SetTokenCookiesToResponse(string accessToken, string refreshToken, string accessTokenCookieKey, string refreshTokenCookieKey, UInt16 accessTokenExpireTime, UInt16 refreshTokenExpireTime)
         {

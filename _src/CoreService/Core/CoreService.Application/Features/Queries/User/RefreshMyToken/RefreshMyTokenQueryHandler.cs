@@ -1,4 +1,6 @@
 ﻿using CoreService.Application.DTOs;
+using CoreService.Application.Features.Command.User.SignIn;
+using CoreService.Application.Helpers;
 using CoreService.Application.Models;
 using CoreService.Application.Repositories;
 using Mambo.Helper;
@@ -19,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace CoreService.Application.Features.Queries.User.RefreshMyToken
 {
-    internal sealed class RefreshMyTokenQueryHandler(ILogger<RefreshMyTokenQueryHandler> _logger, IHttpContextAccessor _httpContextAccessor, AppSettings _appSettings, IUnitOfWork _unitOfWork, Helpers _helpers) : BaseCqrsAndDomainEventHandler<RefreshMyTokenQueryHandler>(_logger), IRequestHandler<RefreshMyTokenQueryRequest, RefreshMyTokenQueryResponse>
+    internal sealed class RefreshMyTokenQueryHandler(ILogger<RefreshMyTokenQueryHandler> _logger, IHttpContextAccessor _httpContextAccessor, AppSettings _appSettings, IUnitOfWork _unitOfWork, GlobalHelpers _globalHelpers, LocalHelpers _localHelpers) : BaseCqrsAndDomainEventHandler<RefreshMyTokenQueryHandler>(_logger), IRequestHandler<RefreshMyTokenQueryRequest, RefreshMyTokenQueryResponse>
     {
         public async Task<RefreshMyTokenQueryResponse> Handle(RefreshMyTokenQueryRequest request, CancellationToken cancellationToken)
         {
@@ -34,13 +36,22 @@ namespace CoreService.Application.Features.Queries.User.RefreshMyToken
                         _httpContextAccessor.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
                         return response;
                     }
-                    var (isTokenValid, errorMessage) = await ValidateRefreshTokenFromCookie(token, cancellationToken);
-                    if (!isTokenValid)
+                    var (foundUser, generatedAccessToken, generatedRefreshToken, errorMessage) = await ValidateRefreshTokenFromCookie(token, cancellationToken);
+
+                    if (!string.IsNullOrEmpty(errorMessage))
                     {
                         LogWarning("This refresh token couldn't be verified", errorMessage, request, HttpStatusCode.Forbidden);
                         response.SetForError("Your session is expired", HttpStatusCode.Forbidden);
                         return response;
                     }
+
+                    response.SetPayload(
+                    SignInCommandResponseModel.CreateNewSignInCommandResponseModel(foundUser.Username, foundUser.Email, foundUser.Firstname, foundUser.Lastname, foundUser.CompanyName, foundUser.RoleName, foundUser.RoleLevel, foundUser.Screens)
+                    );
+
+                    _globalHelpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
+
+                    await _localHelpers.SendTokenWithRabbitMqMessage(generatedAccessToken, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime, generatedRefreshToken, foundUser.Id.ToString(), foundUser.Email, cancellationToken);
                 }
             }
             catch (Exception ex)
@@ -51,7 +62,7 @@ namespace CoreService.Application.Features.Queries.User.RefreshMyToken
             return response;
         }
 
-        private async Task<(bool isRefreshTokenValid, string? errorMessage)> ValidateRefreshTokenFromCookie(string refreshToken, CancellationToken cancellationToken)
+        private async Task<(RefreshMyTokenDto? foundUser, string? generatedAccessToken, string? generatedRefreshToken, string? errorMessage)> ValidateRefreshTokenFromCookie(string refreshToken, CancellationToken cancellationToken)
         {
             var jwtHandler = new JwtSecurityTokenHandler()
             {
@@ -101,22 +112,26 @@ namespace CoreService.Application.Features.Queries.User.RefreshMyToken
             );
                 var username = principal.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
 
-                if (username == null) return (false, "This token doesn't have valid claims");
+                if (username == null) return (null, null, null, "This token doesn't have valid claims");
 
                 var foundUser = await _unitOfWork.UserReadRepository.GetOnlyTokenFieldsAsNoTrackingAsync(username, cancellationToken);
 
-                if (foundUser == null) return (false, "This token doesn't belong any user");
+                if (foundUser == null) return (null, null, null, "This token doesn't belong any user");
+
+                if (foundUser.Username == _appSettings.UiAdminUsername)
+                {
+                    foundUser.SetScreensRange(await _unitOfWork.ScreenReadRepository.GetOnlyScreenNamesAsNoTrackingAsync(cancellationToken));
+                }
 
                 var generatedAccessToken = foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.AccessTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
+
                 var generatedRefreshToken = foundUser.GenerateToken(TimeSpan.FromMinutes(_appSettings.GenerateTokenSettings.RefreshTokenExpireTime), _appSettings.GenerateTokenSettings.SecretKey, _appSettings.GenerateTokenSettings.Issuer, _appSettings.GenerateTokenSettings.Audience);
 
-                _helpers.SetTokenCookiesToResponse(generatedAccessToken, generatedRefreshToken, _appSettings.CookieSettings.AccessTokenCookieKey, _appSettings.CookieSettings.RefreshTokenCookieKey, _appSettings.GenerateTokenSettings.AccessTokenExpireTime, _appSettings.GenerateTokenSettings.RefreshTokenExpireTime);
-
-                return (true, null);
+                return (foundUser, generatedAccessToken, generatedRefreshToken, null);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                return (null, null, null, ex.Message);
             }
         }
     }
