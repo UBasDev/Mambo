@@ -1,5 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html, body{
+    scrollbar-color: black rgb(59, 130, 246);
+    font-family: "Ubuntu", sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, a, input, p, strong, b, button, select, option, textarea, table, th, td, tr, span:not(.pi) {
+    font-family: "Ubuntu", sans-serif !important;
+}
+
+*,*::after,*::before{
+    box-sizing: border-box;
+}
+body{
+    margin:0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+img{
+    display: block;
+    max-width: 100%;
+    height: auto;
+}

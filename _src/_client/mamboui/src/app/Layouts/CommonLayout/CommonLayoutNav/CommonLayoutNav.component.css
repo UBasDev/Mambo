@@ -1,0 +1,6 @@
+:host {
+  display: block;
+}
+.navButton:hover{
+  color: rgb(59, 130, 246);
+}
