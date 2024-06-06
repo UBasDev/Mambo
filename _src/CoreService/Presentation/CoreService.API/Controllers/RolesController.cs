@@ -15,19 +15,19 @@ namespace CoreService.API.Controllers
     public class RolesController(IMediator mediator) : BaseController(mediator)
     {
         [HttpPost("create-single-role")]
-        public async Task<CreateSingleRoleCommandResponse> CreateSingleRole([FromBody] CreateSingleRoleCommandRequest requestBody, CancellationToken cancellationToken)
+        public async Task<CreateSingleRoleCommandResponse> CreateSingleRole([FromBody] CreateSingleRoleCommandRequest requestBody)
         {
             return await SetResponseAsync<CreateSingleRoleCommandRequest, CreateSingleRoleCommandResponse>(requestBody);
         }
 
         [HttpGet("get-all-roles-without-relation")]
-        public async Task<GetAllRolesWithoutRelationQueryResponse> GetAllRolesWithoutRelation(CancellationToken cancellationToken)
+        public async Task<GetAllRolesWithoutRelationQueryResponse> GetAllRolesWithoutRelation()
         {
             return await SetResponseAsync<GetAllRolesWithoutRelationQueryRequest, GetAllRolesWithoutRelationQueryResponse>(new GetAllRolesWithoutRelationQueryRequest());
         }
 
         [HttpPost("get-single-role-by-id")]
-        public async Task<GetSingleRoleByIdQueryResponse> GetSingleRoleById([FromBody] GetSingleRoleByIdQueryRequest requestBody, CancellationToken cancellationToken)
+        public async Task<GetSingleRoleByIdQueryResponse> GetSingleRoleById([FromBody] GetSingleRoleByIdQueryRequest requestBody)
         {
             return await SetResponseAsync<GetSingleRoleByIdQueryRequest, GetSingleRoleByIdQueryResponse>(requestBody);
         }

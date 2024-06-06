@@ -7,16 +7,10 @@ import {
   OnInit,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { setCookieByKey } from '../../Helpers/Helpers';
-import {
-  userDataCookieExpireTime,
-  userDataCookieKey,
-} from '../../Constants/Constants';
 import { IUserModel } from '../../Models/User/UserModel';
 import { IUserInitialState } from '../../StateStore/User/UserReducers';
 import { Store } from '@ngrx/store';
 import { UserStateActions } from '../../StateStore/User/UserActions';
-import { catchError } from 'rxjs';
 
 interface IComponentStates {
   isGetMeButtonActive: boolean;
@@ -25,7 +19,7 @@ interface IUserLogin {
   emailOrUsername: string;
   password: string;
 }
-interface IUserLoginResponse {
+export interface IUserLoginResponse {
   errorMessage: string | null;
   isSuccessful: boolean;
   payload: {
@@ -50,6 +44,7 @@ interface IUserLoginResponse {
     <button (click)="this.login()">LOGIN</button>
     @if(this.componentStates.isGetMeButtonActive == true){
     <button (click)="this.getMyInfo()">GET MY INFO</button>
+    <button (click)="this.getAllRoles()">GET ALL ROLES AUTHORIZED</button>
     }
   `,
   styleUrl: './Home.component.css',
@@ -95,7 +90,7 @@ export class HomeComponent implements OnInit {
         next: (response: IUserLoginResponse) => {
           console.log('response', response);
           if (response.isSuccessful) {
-            var userData: IUserModel = {
+            const userData: IUserModel = {
               email: response.payload.email,
               firstname: response.payload.firstname,
               lastname: response.payload.lastname,
@@ -126,6 +121,23 @@ export class HomeComponent implements OnInit {
       .select('globalUserState')
       .subscribe((data: IUserInitialState) => {
         console.log('user_data', data.loggedInUser);
+      });
+  }
+  getAllRoles(): void {
+    this._httpClient
+      .get(
+        'https://localhost:5999/api/v1/roles/get-all-roles-without-relation',
+        {
+          withCredentials: true,
+        }
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log('RESPONSE FROM ROLES', response);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log('ERROR RESPONSE FROM ROLES', error.error);
+        },
       });
   }
 }
