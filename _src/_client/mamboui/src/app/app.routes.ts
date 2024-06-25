@@ -4,6 +4,7 @@ import { HomeComponent } from './Pages/Home/Home.component';
 import { Authorized1Component } from './Pages/Authorized1/Authorized1.component';
 import { AuthGuard } from './Guards/Auth.guard';
 import { Unauthorized1Component } from './Pages/Unauthorized1/Unauthorized1.component';
+import { SignUpComponent } from './Pages/SignUp/SignUp.component';
 
 export const routes: Routes = [
   {
@@ -24,5 +25,9 @@ export const routes: Routes = [
         component: Unauthorized1Component,
       },
     ],
+  },
+  {
+    path: 'signup',
+    component: SignUpComponent,
   },
 ];
