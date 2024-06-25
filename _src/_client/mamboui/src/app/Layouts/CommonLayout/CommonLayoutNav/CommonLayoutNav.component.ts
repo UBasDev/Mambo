@@ -51,6 +51,7 @@ import { RippleModule } from 'primeng/ripple';
         </div>
         <div class="hidden md:flex items-center gap-x-2">
           <p-button
+            (onClick)="this.goToPage('/signup')"
             size="small"
             severity="success"
             rounded="true"
